@@ -176,7 +176,8 @@ namespace global_user
         SMALL_BUFF,
         BIG_BUFF,
         OUTPOST_ROTATION_MODE,
-        SENTRY_NORMAL
+        SENTRY_NORMAL,
+        DEBUG
     };
 
     struct TaskData

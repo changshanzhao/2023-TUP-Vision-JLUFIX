@@ -220,6 +220,7 @@ namespace buff_detector
         buff_msg_pub_->publish(std::move(buff_msg));
 
         bool show_img = this->get_parameter("show_img").as_bool();
+        std::cout << "show_img" << show_img << endl;
         if (show_img)
         {
             putText(
@@ -275,7 +276,7 @@ namespace buff_detector
 
         this->declare_parameter<bool>("use_imu", false);
         this->declare_parameter<bool>("use_roi", false);
-        this->declare_parameter<bool>("show_img", false);
+        this->declare_parameter<bool>("show_img", true);
         this->declare_parameter<bool>("show_all_fans", true);
         this->declare_parameter<bool>("show_fps", true);
         this->declare_parameter<bool>("assist_label", false);

@@ -29,8 +29,8 @@ def generate_launch_description():
     #--------------------------------------Configs----------------------------------------------
     camera_type = 'daheng' # (daheng / hik / mvs / usb)
     camera_name = 'KE0200110076'
-    use_serial = True
-    use_imu = True
+    use_serial = False
+    use_imu = False
     bullet_speed = 14.5
     shoot_delay = 150.0 # 发弹延迟
     delay_coeff = 1.0   # 延迟系数（放大时间提前量，缓解云台跟随滞后问题
