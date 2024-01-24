@@ -1,5 +1,5 @@
-# TUP-Vision-2023-Based
-沈阳航空航天大学TUP战队2023赛季视觉基础程序开发仓库
+# TUP-Vision-2023-JLUFIX
+基于沈阳航空航天大学TUP战队2023赛季视觉基础程序开发仓库，尝试完善算法，缝合代码
 
 ## Version
 V3.0
@@ -46,7 +46,7 @@ V3.0
 
 |Library | URL |  Description |
 | ---    | --- | ---          |
-|OpenVINO| https://www.intel.com/content/www/us/en/developer/tools/openvino-toolkit/download.html| 目前使用的版本是OpenVINO2022.1，直接offline下载一键安装即可，需要给权限 |
+|OpenVINO| https://www.intel.com/content/www/us/en/developer/tools/openvino-toolkit/download.html| 目前使用的版本是OpenVINO2023.1，直接offline下载一键安装即可，需要给权限 |
 |glog| https://github.com/google/glog/releases/tag/v0.5.0|
 yaml-cpp| https://github.com/jbeder/yaml-cpp/releases/tag/yaml-cpp-0.5.3  | 需指定将yaml-cpp库编译成共享库
 Ceres   | http://ceres-solver.org/installation.html | Click  "latest stable release"
