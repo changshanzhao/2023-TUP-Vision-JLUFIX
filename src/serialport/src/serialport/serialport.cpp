@@ -86,9 +86,7 @@ namespace serialport
         // RCLCPP_INFO_THROTTLE(logger_, steady_clock_, 100, "rec_delay:%.3fms", (now.nanoseconds() - timestamp_.nanoseconds()) / 1e6);
 
 
-        if ((serial_data_.rdata[0] == 0xA5 || serial_data_.rdata[0] == 0xB5 || serial_data_.rdata[0] == 0xC5)
-            && crc_check_.Verify_CRC8_Check_Sum(serial_data_.rdata, 3)
-            && crc_check_.Verify_CRC16_Check_Sum(serial_data_.rdata, (uint32_t)(lens)))
+        if ((serial_data_.rdata[0] == 0xA5 || serial_data_.rdata[0] == 0xB5 || serial_data_.rdata[0] == 0xC5))
         {
             // cout << 1 << endl;
             // rclcpp::Time now = this->steady_clock_.now();

@@ -166,11 +166,11 @@ namespace serialport
                     float shoot_delay = 0.0;
                     
                     // Process IMU Datas.
-                    data_transform_->getQuatData(&serial_port_->serial_data_.rdata[3], quat);
-                    data_transform_->getGyroData(&serial_port_->serial_data_.rdata[19], gyro);
-                    data_transform_->getAccData(&serial_port_->serial_data_.rdata[31], acc);
-                    data_transform_->getBulletSpeed(&serial_port_->serial_data_.rdata[43], bullet_speed);
-                    data_transform_->getShootDelay(&serial_port_->serial_data_.rdata[47], shoot_delay);
+                    data_transform_->getQuatData(&serial_port_->serial_data_.rdata[2], quat);
+                    data_transform_->getGyroData(&serial_port_->serial_data_.rdata[18], gyro);
+                    data_transform_->getAccData(&serial_port_->serial_data_.rdata[30], acc);
+                    data_transform_->getBulletSpeed(&serial_port_->serial_data_.rdata[42], bullet_speed);
+                    data_transform_->getShootDelay(&serial_port_->serial_data_.rdata[46], shoot_delay);
                     
                     // Gimbal angle.
                     // float yaw_angle = 0.0, pitch_angle = 0.0;

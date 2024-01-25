@@ -28,7 +28,7 @@ def generate_launch_description():
     #-------------------------------------------------------------------------------------------
     #--------------------------------------Configs----------------------------------------------
     camera_type = 'daheng' # (daheng / hik / mvs / usb)
-    camera_name = 'KE0200110076'
+    camera_name = 'KE0200110074'
     use_serial = False
     use_imu = False
     bullet_speed = 14.5
