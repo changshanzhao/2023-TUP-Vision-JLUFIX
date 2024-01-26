@@ -105,6 +105,11 @@ namespace serialport
     void SerialPort::sendData(int bytes_num)
     {
         auto write_stauts = write(serial_data_.fd, Tdata, bytes_num);
+        // RCLCPP_INFO(logger_, "mode: %d", Tdata[1]);
+        // RCLCPP_INFO(logger_, "isSwitched: %d", Tdata[14]);
+        // RCLCPP_INFO(logger_, "isFindTarget: %d", Tdata[15]);
+        // RCLCPP_INFO(logger_, "isSpinning: %d", Tdata[16]);
+        // RCLCPP_INFO(logger_, "isShooting: %d", Tdata[17]);
         RCLCPP_WARN_THROTTLE(logger_, steady_clock_, 500, "Sending msg...");
         return;
     }

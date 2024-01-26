@@ -54,6 +54,7 @@ namespace serialport
         if (using_port_)
         {
             serial_msg_pub_ = this->create_publisher<SerialMsg>("/serial_msg", qos);
+            imu_msg_pub_ = this->create_publisher<sensor_msgs::msg::Imu>("imu_msg", qos);
             // receive_timer_ = rclcpp::create_timer(this, this->get_clock(), 5ms, std::bind(&SerialPortNode::receiveData, this));
             
             watch_timer_ = rclcpp::create_timer(
@@ -189,10 +190,13 @@ namespace serialport
 
                     rclcpp::Time now = this->get_clock()->now();
                     SerialMsg serial_msg;
+                    sensor_msgs::msg::Imu imu_msg;
                     serial_msg.header.frame_id = "serial";
                     serial_msg.header.stamp = now;
                     serial_msg.imu.header.frame_id = "imu_link";
                     serial_msg.imu.header.stamp = now;
+                    imu_msg.header.frame_id = "imu_link";
+                    imu_msg.header.stamp = now;
                     serial_msg.mode = mode;
                     serial_msg.bullet_speed = bullet_speed;
                     serial_msg.shoot_delay = shoot_delay;
@@ -206,7 +210,16 @@ namespace serialport
                     serial_msg.imu.linear_acceleration.x = acc[0];
                     serial_msg.imu.linear_acceleration.y = acc[1];
                     serial_msg.imu.linear_acceleration.z = acc[2];
-                    
+                    imu_msg.orientation.w = quat[0];
+                    imu_msg.orientation.x = quat[1];
+                    imu_msg.orientation.y = quat[2];
+                    imu_msg.orientation.z = quat[3];
+                    imu_msg.angular_velocity.x = gyro[0];
+                    imu_msg.angular_velocity.y = gyro[1];
+                    imu_msg.angular_velocity.z = gyro[2];
+                    imu_msg.linear_acceleration.x = acc[0];
+                    imu_msg.linear_acceleration.y = acc[1];
+                    imu_msg.linear_acceleration.z = acc[2];
                     geometry_msgs::msg::TransformStamped t;
 
                     // Read message content and assign it to corresponding tf variables
@@ -230,6 +243,7 @@ namespace serialport
 
                     // Pub serial msg
                     serial_msg_pub_->publish(std::move(serial_msg));
+                    imu_msg_pub_->publish(std::move(imu_msg));
                 }
             }
         }
@@ -281,8 +295,9 @@ namespace serialport
                     this->get_logger(),
                     *this->get_clock(), 
                     50,
-                    "is_target_switched: %d",
-                    (target_info->is_switched || target_info->is_spinning_switched)
+                    "is_target_switched: %d %d",
+                    (target_info->is_switched || target_info->is_spinning_switched),
+                    mode
                 );
             }
             else 

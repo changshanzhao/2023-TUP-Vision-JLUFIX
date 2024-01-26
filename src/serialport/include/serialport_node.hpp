@@ -21,6 +21,7 @@
 #include <tf2/LinearMath/Quaternion.h>
 #include <tf2_ros/transform_broadcaster.h>
 #include <geometry_msgs/msg/transform_stamped.hpp>
+#include <sensor_msgs/msg/imu.hpp>
 
 #include "./serialport/serialport.hpp"
 #include "./data_processor/data_transform.hpp"
@@ -56,7 +57,7 @@ namespace serialport
         
         void serialWatcher();
         rclcpp::Publisher<SerialMsg>::SharedPtr serial_msg_pub_;
-
+        rclcpp::Publisher<sensor_msgs::msg::Imu>::SharedPtr imu_msg_pub_;
     private:
         int baud_;
         std::string id_;

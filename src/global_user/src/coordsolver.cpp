@@ -210,10 +210,12 @@ namespace coordsolver
         // RCLCPP_WARN_THROTTLE(
         //     logger_, 
         //     steady_clock_, 
-        //     200, 
-        //     "euler: (%.3f %.3f %.3f)", 
-        //     result.euler(0), result.euler(1), result.euler(2)
+        //     10, 
+        //     " armor_cam：(%.3f %.3f %.3f)    armor_world:（%.3f %.3f %.3f）", 
+        //     result.armor_cam(0), result.armor_cam(1), result.armor_cam(2),
+        //     result.armor_world(0), result.armor_world(1), result.armor_world(2)
         // );
+
         return result;
     }
 
@@ -403,8 +405,7 @@ namespace coordsolver
 
         // Eigen::Matrix3d rrmat = rmat;
         // auto vec = rotationMatrixToEulerAngles(rrmat);
-        // cout<<"Euler : "<<vec[0] * 180.f / CV_PI<<" "<<vec[1] * 180.f / CV_PI<<" "<<vec[2] * 180.f / CV_PI<<endl;
-        // RCLCPP_INFO_THROTTLE(logger_, this->steady_clock_, 500, "Euler: %lf %lf %lf", vec[0] * 180 / CV_PI, vec[1] * 180 / CV_PI, vec[2] * 180 / CV_PI);
+        // RCLCPP_INFO_THROTTLE(logger_, this->steady_clock_, 5, "Euler: %lf %lf %lf", vec[0] * 180 / CV_PI, vec[1] * 180 / CV_PI, vec[2] * 180 / CV_PI);
         // cout << "rmat:" << rmat(0,0) << " " << rmat(0,1) << " " << rmat(0,2) << endl
         // << rmat(1,0) << " " << rmat(1,1) << " " << rmat(1,2) << endl
         // << rmat(2,0) << " " << rmat(2,1) << " " << rmat(2,2) << endl;   

@@ -30,6 +30,12 @@ namespace serialport
         trans_data[0] = 0xA5;
         trans_data[1] = mode;
 
+        // //云台角度数据
+        // float float_data[] = {vision_data.pitch_angle, vision_data.yaw_angle, vision_data.distance};
+        // float2UcharRawArray(float_data, 3, &trans_data[2]);
+    
+
+
         //云台角度数据
         float float_data[] = {vision_data.pitch_angle, vision_data.yaw_angle, vision_data.distance};
         float2UcharRawArray(float_data, 3, &trans_data[2]);
@@ -39,49 +45,60 @@ namespace serialport
         trans_data[15] = vision_data.isFindTarget;
         trans_data[16] = vision_data.isSpinning;
         trans_data[17] = vision_data.isShooting;
-        trans_data[18] = vision_data.isPrediction;
+        // RCLCPP_INFO(logger_, "mode: %d", mode);
+        // RCLCPP_INFO(logger_, "isSwitched: %d", vision_data.isSwitched);
+        // RCLCPP_INFO(logger_, "isFindTarget: %d", vision_data.isFindTarget);
+        // RCLCPP_INFO(logger_, "isSpinning: %d", vision_data.isSpinning);
+        // RCLCPP_INFO(logger_, "isShooting: %d", vision_data.isShooting);
+        // RCLCPP_INFO(logger_, "mode: %d", trans_data[1]);
+        // RCLCPP_INFO(logger_, "isSwitched: %d", trans_data[14]);
+        // RCLCPP_INFO(logger_, "isFindTarget: %d", trans_data[15]);
+        // RCLCPP_INFO(logger_, "isSpinning: %d", trans_data[16]);
+        // RCLCPP_INFO(logger_, "isShooting: %d", trans_data[17]);
+        
+        // trans_data[18] = vision_data.isPrediction;
 
-        //目标位置信息
+        // // 目标位置信息
         // float float_3d_data[] = {(float)vision_data.meas_tracking_point[0], (float)vision_data.meas_tracking_point[1], (float)vision_data.meas_tracking_point[2],
         //     (float)vision_data.pred_aiming_point[0], (float)vision_data.pred_aiming_point[1], (float)vision_data.pred_aiming_point[2]};
-        // float2UcharRawArray(float_3d_data, 6, &trans_data[20]);
+        // float2UcharRawArray(float_3d_data, 6, &trans_data[19]);
         // cout << "x:" << float_3d_data[0] <<  " y:" << float_3d_data[1] << " z:" << float_3d_data[2] << endl;
     }
 
-    /**
-     * @brief 数据转化
-     * 
-     * @param mode 模式位
-     * @param vision_data 上位机发送的数据
-     * @param trans_data 转化后的数据
-     */
-    void DataTransform::transformData(int mode, const VisionNavData &vision_data, uchar* trans_data)
-    {
-        trans_data[0] = 0xB5;
-        trans_data[1] = mode;
-        crc_check_.Append_CRC8_Check_Sum(trans_data, 3);
-        float twist[] = {vision_data.linear_velocity[0], vision_data.linear_velocity[1], vision_data.linear_velocity[2],
-            vision_data.angular_velocity[0], vision_data.angular_velocity[1], vision_data.angular_velocity[2]};
-        float2UcharRawArray(twist, 6, &trans_data[3]);
-        crc_check_.Append_CRC16_Check_Sum(trans_data, 64);
-    }
+    // /**
+    //  * @brief 数据转化
+    //  * 
+    //  * @param mode 模式位
+    //  * @param vision_data 上位机发送的数据
+    //  * @param trans_data 转化后的数据
+    //  */
+    // void DataTransform::transformData(int mode, const VisionNavData &vision_data, uchar* trans_data)
+    // {
+    //     trans_data[0] = 0xB5;
+    //     trans_data[1] = mode;
+    //     crc_check_.Append_CRC8_Check_Sum(trans_data, 3);
+    //     float twist[] = {vision_data.linear_velocity[0], vision_data.linear_velocity[1], vision_data.linear_velocity[2],
+    //         vision_data.angular_velocity[0], vision_data.angular_velocity[1], vision_data.angular_velocity[2]};
+    //     float2UcharRawArray(twist, 6, &trans_data[3]);
+    //     crc_check_.Append_CRC16_Check_Sum(trans_data, 64);
+    // }
 
-    /**
-     * @brief 数据转化
-     * 
-     * @param mode 模式位
-     * @param vision_data 上位机发送的数据
-     * @param trans_data 转化后的数据
-     */
-    void DataTransform::transformData(int mode, const VisionDecisionData &vision_data, uchar* trans_data)
-    {
-        trans_data[0] = 0xC5;
-        trans_data[1] = mode;
-        crc_check_.Append_CRC8_Check_Sum(trans_data, 3);
-        float theta[] = {vision_data.theta_gimbal,vision_data.theta_chassis};
-        float2UcharRawArray(theta, 2, &trans_data[3]);
-        crc_check_.Append_CRC16_Check_Sum(trans_data, 64);
-    }
+    // /**
+    //  * @brief 数据转化
+    //  * 
+    //  * @param mode 模式位
+    //  * @param vision_data 上位机发送的数据
+    //  * @param trans_data 转化后的数据
+    //  */
+    // void DataTransform::transformData(int mode, const VisionDecisionData &vision_data, uchar* trans_data)
+    // {
+    //     trans_data[0] = 0xC5;
+    //     trans_data[1] = mode;
+    //     crc_check_.Append_CRC8_Check_Sum(trans_data, 3);
+    //     float theta[] = {vision_data.theta_gimbal,vision_data.theta_chassis};
+    //     float2UcharRawArray(theta, 2, &trans_data[3]);
+    //     crc_check_.Append_CRC16_Check_Sum(trans_data, 64);
+    // }
 
     void DataTransform::getShootDelay(uchar* raw_data, float& shoot_delay)
     {

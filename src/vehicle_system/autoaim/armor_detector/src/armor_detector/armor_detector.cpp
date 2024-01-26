@@ -697,14 +697,14 @@ namespace armor_detector
         autoaim_msg.vehicle_hp = target_hp;
         autoaim_msg.is_target_lost = false;
 
-        RCLCPP_INFO_THROTTLE(
-            logger_, 
-            steady_clock_, 
-            200, 
-            "xyz_cam: (%.3f %.3f %.3f) xyz_world: (%.3f %.3f %.3f)", 
-            autoaim_msg.armors.front().point3d_cam.x, autoaim_msg.armors.front().point3d_cam.y, autoaim_msg.armors.front().point3d_cam.z,
-            autoaim_msg.armors.front().point3d_world.x, autoaim_msg.armors.front().point3d_world.y, autoaim_msg.armors.front().point3d_world.z
-        );
+        // RCLCPP_INFO_THROTTLE(
+        //     logger_, 
+        //     steady_clock_, 
+        //     200, 
+        //     "xyz_cam: (%.3f %.3f %.3f) xyz_world: (%.3f %.3f %.3f)", 
+        //     autoaim_msg.armors.front().point3d_cam.x, autoaim_msg.armors.front().point3d_cam.y, autoaim_msg.armors.front().point3d_cam.z,
+        //     autoaim_msg.armors.front().point3d_world.x, autoaim_msg.armors.front().point3d_world.y, autoaim_msg.armors.front().point3d_world.z
+        // );
 
         //获取装甲板中心与装甲板面积以下一次ROI截取使用
         // last_roi_center_ = Point2i(512,640);

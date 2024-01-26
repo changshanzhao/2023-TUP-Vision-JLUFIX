@@ -75,13 +75,13 @@ namespace serialport
 
         //收发数据
         bool receiveData(int lens = 64);
-        void sendData(int bytes_num = 64);
+        void sendData(int bytes_num = 20);
 
         //开闭串口
         bool openPort();
         void closePort();
         
-        uchar Tdata[64] = {0x00}; 
+        uchar Tdata[20] = {0x00}; 
         SerialData serial_data_;
     private:
         string serial_id_;

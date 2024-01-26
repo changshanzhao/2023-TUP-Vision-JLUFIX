@@ -89,27 +89,27 @@ namespace serialport
             // return false;
         
         bytes = ::read(fd, &buffer, sizeof(buffer));
-        if(buffer.empty())
-        {
-            std::cout << "Buffer is empty..." << std::endl;
-        }
-        else
-        {
-            for(auto& info : buffer)
-            {
-                std::cout << "data:" << info << std::endl;
-            }
-        }
+        // if(buffer.empty())
+        // {
+        //     std::cout << "Buffer is empty..." << std::endl;
+        // }
+        // else
+        // {
+        //     for(auto& info : buffer)
+        //     {
+        //         std::cout << "data:" << info << std::endl;
+        //     }
+        // }
     }
 
     void serialport::write(std::vector<uint8_t>& buffer)
     {
-        auto send_ = ::write(fd, &buffer, sizeof(buffer));
-        if(send_ == -1)
-        {
-            printf("send data failed!");
-            // return false;
-        }
+        auto send_ = ::write(fd, &buffer, 20);
+        // if(send_ == -1)
+        // {
+        //     printf("send data failed!");
+        //     // return false;
+        // }
     }
 
     std::string serialport::error_message()

@@ -73,7 +73,7 @@ def generate_launch_description():
                             parameters=[{
                                 'using_port': True,
                                 'tracking_target': True,
-                                'print_serial_info': True,
+                                'print_serial_info': False,
                                 'print_referee_info': False
                             }],
                             respawn=True,
