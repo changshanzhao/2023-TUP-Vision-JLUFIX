@@ -478,14 +478,14 @@ namespace buff_detector
 
         // RCLCPP_INFO(logger_, "r_center:(%.3f, %.3f, %.3f)", mean_r_center(0), mean_r_center(1), mean_r_center(2));
         
-        RCLCPP_INFO_THROTTLE(
-            logger_, 
-            steady_clock_,
-            50,
-            "armor3d_cam:(%.3f, %.3f, %.3f) armor3d_world:(%.3f, %.3f, %.3f)", 
-            target.armor3d_cam(0), target.armor3d_cam(1), target.armor3d_cam(2),
-            target.armor3d_world(0), target.armor3d_world(1), target.armor3d_world(2)
-        );
+        // RCLCPP_INFO_THROTTLE(
+        //     logger_, 
+        //     steady_clock_,
+        //     50,
+        //     "armor3d_cam:(%.3f, %.3f, %.3f) armor3d_world:(%.3f, %.3f, %.3f)", 
+        //     target.armor3d_cam(0), target.armor3d_cam(1), target.armor3d_cam(2),
+        //     target.armor3d_world(0), target.armor3d_world(1), target.armor3d_world(2)
+        // );
         
         RCLCPP_INFO_THROTTLE(
             logger_, 

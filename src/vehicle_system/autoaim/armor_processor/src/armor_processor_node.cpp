@@ -146,13 +146,13 @@ namespace armor_processor
             processor_->predict_param_.shoot_delay = (processor_->predict_param_.shoot_delay + target.shoot_delay) / 2.0;
         }
 
-        RCLCPP_WARN_THROTTLE(
-            this->get_logger(), 
-            *this->get_clock(), 
-            100, 
-            "rec_bullet_speed:%.3f cur_bullet_speed:%.3f cur_shoot_delay:%.3f", 
-            target.bullet_speed, processor_->coordsolver_.getBulletSpeed(), processor_->predict_param_.shoot_delay
-        );
+        // RCLCPP_WARN_THROTTLE(
+        //     this->get_logger(), 
+        //     *this->get_clock(), 
+        //     100, 
+        //     "rec_bullet_speed:%.3f cur_bullet_speed:%.3f cur_shoot_delay:%.3f", 
+        //     target.bullet_speed, processor_->coordsolver_.getBulletSpeed(), processor_->predict_param_.shoot_delay
+        // );
                                      
         cv::Mat dst;
         if (debug_param_.show_img)
@@ -166,13 +166,13 @@ namespace armor_processor
             image_mutex_.unlock();
         }
 
-        RCLCPP_WARN_THROTTLE(
-            this->get_logger(), 
-            *this->get_clock(), 
-            100, 
-            "is target lost: %d", 
-            (int)target.is_target_lost
-        );
+        // RCLCPP_WARN_THROTTLE(
+        //     this->get_logger(), 
+        //     *this->get_clock(), 
+        //     100, 
+        //     "is target lost: %d", 
+        //     (int)target.is_target_lost
+        // );
 
         if (target.is_target_lost && processor_->is_last_exists_)
         {   //目标丢失且上帧存在，预测器进入丢失预测状态
@@ -342,18 +342,16 @@ namespace armor_processor
         gimbal_msg.is_prediction = is_pred_; 
         if (target.mode == AUTOAIM_NORMAL || target.mode == AUTOAIM_SLING)
         {
-            // gimbal_msg.pitch = abs(angle[1]) >= 45.0 ? tracking_angle[1] : angle[1];
-            // gimbal_msg.yaw = abs(angle[0]) >= 45.0 ? tracking_angle[0] : angle[0];
-            gimbal_msg.pitch = tracking_angle[1]*0.5;
-            gimbal_msg.yaw = tracking_angle[0]*0.5;
+            gimbal_msg.pitch = (abs(angle[1]) >= 45.0 ? tracking_angle[1] : angle[1]);
+            gimbal_msg.yaw = (abs(angle[0]) >= 45.0 ? tracking_angle[0] : angle[0]);
             gimbal_msg.distance = aiming_point_cam.norm();
         }
         else if (target.mode == AUTOAIM_TRACKING)
         {
-            // gimbal_msg.pitch = abs(tracking_angle[1]) >= 45.0 ? 0.0 : tracking_angle[1];
-            // gimbal_msg.yaw = abs(tracking_angle[0]) >= 45.0 ? 0.0 : tracking_angle[0];
-            gimbal_msg.pitch = tracking_angle[1]*0.5;
-            gimbal_msg.yaw = tracking_angle[0]*0.5;
+            // gimbal_msg.pitch = (abs(tracking_angle[1]) >= 45.0 ? 0.0 : tracking_angle[1])*0.5;
+            // gimbal_msg.yaw = (abs(tracking_angle[0]) >= 45.0 ? 0.0 : tracking_angle[0])*0.5;
+            gimbal_msg.pitch = (abs(tracking_angle[1]) >= 45.0 ? 0.0 : tracking_angle[1]);
+            gimbal_msg.yaw = (abs(tracking_angle[0]) >= 45.0 ? 0.0 : tracking_angle[0]);
             gimbal_msg.distance = tracking_point_cam.norm();
         }
         gimbal_msg_pub_->publish(std::move(gimbal_msg));

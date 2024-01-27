@@ -285,7 +285,7 @@ namespace coordsolver
 
     inline double CoordSolver::calcYaw(Eigen::Vector3d &xyz)
     {
-        return atan2(xyz[0], xyz[2]) * 180 / CV_PI;
+        return -atan2(xyz[0], xyz[2]) * 180 / CV_PI;
     }
 
     /**

@@ -370,13 +370,13 @@ namespace armor_detector
             target_key = "R" + to_string(target_id);
         }
         
-        RCLCPP_INFO_THROTTLE(
-            logger_, 
-            this->steady_clock_, 
-            500, 
-            "Target key: %s", 
-            target_key.c_str()
-        );
+        // RCLCPP_INFO_THROTTLE(
+        //     logger_, 
+        //     this->steady_clock_, 
+        //     500, 
+        //     "Target key: %s", 
+        //     target_key.c_str()
+        // );
 
         ///-----------------------------detect whether exists matched tracker------------------------------------------
         if (trackers_map_.count(target_key) == 0)
