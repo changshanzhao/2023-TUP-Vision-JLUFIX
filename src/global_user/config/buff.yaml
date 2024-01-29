@@ -2,7 +2,7 @@
   ros__parameters:
   # Detector params.
     buff_mode: 4
-    color: 1 # 0: blue / 1: red
+    color: 0 # 0: blue / 1: red
     max_angle: 0.50  # fan switched angle threshhold
     max_lost_cnt: 5 
     max_v: 4.0  
@@ -23,10 +23,11 @@
     show_img: true
     show_all_fans: true
     show_fps: true
-    print_target_info: true
+    print_target_info: false
     prinf_latency: true
+    
     assist_label: false
-    show_marker: false
+    show_marker: true
 
 /buff_processor:
   ros__parameters:
@@ -36,8 +37,8 @@
     max_v: 3.0
     max_a: 8.0
     history_deque_len_cos: 150
-    history_deque_len_phase: 100
-    history_deque_len_uniform: 100
+    history_deque_len_phase: 150
+    history_deque_len_uniform: 150
     window_size: 2
     delay_small: 250.0
     delay_big: 170.0
@@ -52,6 +53,6 @@
     
   # Debug.
     debug: true
-    show_img: false
+    show_img: true
     show_marker: false
-    show_fitting_curve: true
+    show_fitting_curve: false

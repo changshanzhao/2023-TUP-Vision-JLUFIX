@@ -66,9 +66,9 @@
     max_dt: 1000
     max_cost: 10
     window_size: 3
-    min_fitting_lens: 5
+    min_fitting_lens: 15
     max_offset_value: 0.45
-    reserve_factor: 500.0 # 储备系数(>=1)
+    reserve_factor: 600.0 # 储备系数(>=1)
 
   # Debug params.
     debug: true
@@ -87,15 +87,15 @@
   # Filter params.
     filter_param_path: "/config/filter_param.yaml"
   
-  # uniform model
+  # uniform model(spin)
     #----------------------------------Xc------Yc----Zc-----r---theta--omega
-    uniform_ekf_process_noise_param: [0.00005, 0.0001, 0.002, 0.0005, 0.002, 0.001]
+    uniform_ekf_process_noise_param: [0.00005, 0.0001, 0.002, 0.005, 0.002, 0.001]
     #----------------------------------X----Y---Z---theta
-    uniform_ekf_measure_noise_param: [5.0, 2.0, 1.0, 1.0]
+    uniform_ekf_measure_noise_param: [0.5, 0.2, 0.1, 0.1]
     
-  # Singer model
+  # Singer model(armor)
     # alpha:机动频率(alpha_x/alpha_y/alpha_z) sigma:机动加速度标准差(sigma_x/sigma_y/sigma_z)
-    singer_model_process_param: [1.00, 1.00, 1.0, 2.65, 10.45, 2.65]
+    singer_model_process_param: [1.00, 1.00, 1.0, 2, 8, 2]
     # r:观测协方差系数(r1/r2/r3)
     singer_model_measure_param: [1.0, 1.0, 1.0]
 

@@ -39,12 +39,15 @@ namespace serialport
         //云台角度数据
         float float_data[] = {vision_data.pitch_angle, vision_data.yaw_angle, vision_data.distance};
         float2UcharRawArray(float_data, 3, &trans_data[2]);
+        // float float_3d_data[] = {(float)vision_data.pred_aiming_point[0], (float)vision_data.pred_aiming_point[1], (float)vision_data.pred_aiming_point[2]};
+        // float2UcharRawArray(float_3d_data, 3, &trans_data[2]);
         
         //目标状态信息
         trans_data[14] = vision_data.isSwitched;
         trans_data[15] = vision_data.isFindTarget;
         trans_data[16] = vision_data.isSpinning;
         trans_data[17] = vision_data.isShooting;
+        crc_check_.Append_CRC16_Check_Sum(trans_data, 64);
         // RCLCPP_INFO(logger_, "mode: %d", mode);
         // RCLCPP_INFO(logger_, "isSwitched: %d", vision_data.isSwitched);
         // RCLCPP_INFO(logger_, "isFindTarget: %d", vision_data.isFindTarget);
@@ -59,9 +62,7 @@ namespace serialport
         // trans_data[18] = vision_data.isPrediction;
 
         // // 目标位置信息
-        // float float_3d_data[] = {(float)vision_data.meas_tracking_point[0], (float)vision_data.meas_tracking_point[1], (float)vision_data.meas_tracking_point[2],
-        //     (float)vision_data.pred_aiming_point[0], (float)vision_data.pred_aiming_point[1], (float)vision_data.pred_aiming_point[2]};
-        // float2UcharRawArray(float_3d_data, 6, &trans_data[19]);
+
         // cout << "x:" << float_3d_data[0] <<  " y:" << float_3d_data[1] << " z:" << float_3d_data[2] << endl;
     }
 

@@ -145,8 +145,11 @@ namespace buff_processor
             gimbal_msg.is_shooting = false;
             gimbal_msg.is_target = false;
         }
+        gimbal_msg.imu_pitch = buff_msg.imu_pitch;
+        gimbal_msg.imu_pitch = buff_msg.imu_yaw;
         gimbal_msg.header.frame_id = "barrel_link2";
         gimbal_msg.header.stamp = buff_msg.header.stamp;
+
         gimbal_msg_pub_->publish(std::move(gimbal_msg));
 
         if (is_predicted)
@@ -201,7 +204,7 @@ namespace buff_processor
 
                 marker_array.markers.emplace_back(marker);                     
                 // Publish the marker_array
-                marker_array_pub_->publish(marker_array);
+
             }
         }
 
@@ -264,6 +267,8 @@ namespace buff_processor
                 predict_msg.abs_fitting_angle = last_abs_fitting_angle;
                 predict_msg.abs_pred_angle = last_abs_pred_angle;
             }
+            predict_msg.imu_yaw = buff_msg.imu_yaw;
+            predict_msg.imu_pitch = buff_msg.imu_pitch;
             predict_msg_pub_->publish(std::move(predict_msg));
         }
 

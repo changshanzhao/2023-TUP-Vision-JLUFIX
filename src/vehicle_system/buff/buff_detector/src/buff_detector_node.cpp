@@ -142,6 +142,10 @@ namespace buff_detector
             Eigen::Matrix3d rmat = Eigen::Matrix3d::Identity();
             src.quat = Eigen::Quaterniond(rmat);
         }
+        Eigen::Matrix3d rmat_imu = src.quat.toRotationMatrix();
+        auto vec = rotationMatrixToEulerAngles(rmat_imu);
+        buff_msg.imu_yaw = vec[0];
+        buff_msg.imu_pitch = vec[1];
         serial_mutex_.unlock();
         
         TargetInfo target_info;

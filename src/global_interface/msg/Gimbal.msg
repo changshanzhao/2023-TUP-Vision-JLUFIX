@@ -1,4 +1,6 @@
 std_msgs/Header header
+float32 imu_pitch
+float32 imu_yaw
 float32 pitch
 float32 yaw
 float32 distance
