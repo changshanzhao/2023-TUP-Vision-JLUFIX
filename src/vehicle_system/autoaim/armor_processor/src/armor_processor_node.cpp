@@ -344,17 +344,19 @@ namespace armor_processor
         {
             // gimbal_msg.pitch = (abs(tracking_angle[1]) >= 45.0 ? 0.0 : tracking_angle[1])*0.5;
             // gimbal_msg.yaw = (abs(tracking_angle[0]) >= 45.0 ? 0.0 : tracking_angle[0])*0.5;
-            gimbal_msg.pitch = (abs(angle[1]) >= 45.0 ? tracking_angle[1] : angle[1])*0.4;
-            gimbal_msg.yaw = (abs(angle[0]) >= 45.0 ? tracking_angle[0] : angle[0])*0.5;
+            gimbal_msg.pitch = (abs(angle[1]) >= 45.0 ? tracking_angle[1] : angle[1]);
+            gimbal_msg.yaw = (abs(angle[0]) >= 45.0 ? tracking_angle[0] : angle[0]);
             gimbal_msg.distance = aiming_point_cam.norm();
         }
         else if (target.mode == AUTOAIM_TRACKING)
         {
 
-            gimbal_msg.pitch = (abs(tracking_angle[1]) >= 45.0 ? 0.0 : tracking_angle[1])*0.4;
-            gimbal_msg.yaw = (abs(tracking_angle[0]) >= 45.0 ? 0.0 : tracking_angle[0])*0.5;
+            gimbal_msg.pitch = (abs(tracking_angle[1]) >= 45.0 ? 0.0 : tracking_angle[1]);
+            gimbal_msg.yaw = (abs(tracking_angle[0]) >= 45.0 ? 0.0 : tracking_angle[0]);
             gimbal_msg.distance = tracking_point_cam.norm();
         }
+        gimbal_msg.imu_pitch = target.imu_pitch;
+        gimbal_msg.imu_yaw = target.imu_yaw;
         gimbal_msg_pub_->publish(std::move(gimbal_msg));
 
         processor_->is_last_exists_ = !target.is_target_lost;

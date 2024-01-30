@@ -36,9 +36,9 @@
     max_rmse: 3.5
     max_v: 3.0
     max_a: 8.0
-    history_deque_len_cos: 150
-    history_deque_len_phase: 150
-    history_deque_len_uniform: 150
+    history_deque_len_cos: 50
+    history_deque_len_phase: 50
+    history_deque_len_uniform: 50
     window_size: 2
     delay_small: 250.0
     delay_big: 170.0
@@ -55,4 +55,4 @@
     debug: true
     show_img: true
     show_marker: false
-    show_fitting_curve: false
+    show_fitting_curve: true

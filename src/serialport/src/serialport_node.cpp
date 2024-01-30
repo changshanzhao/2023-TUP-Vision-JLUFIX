@@ -278,8 +278,8 @@ namespace serialport
                 vision_data = 
                 {
                     (serial_port_->steady_clock_.now().nanoseconds() / 1e6),
-                    0.5*(float)target_info->pitch + (float)target_info->imu_pitch/3.1415926535*180, 
-                    -0.5*(float)target_info->yaw + (float)target_info->imu_yaw/3.1415926535*180, 
+                    0.8*(float)target_info->pitch + (float)target_info->imu_pitch/3.1415926535*180, 
+                    -(0.8*(float)target_info->yaw + (float)target_info->imu_yaw/3.1415926535*180), 
                     (float)target_info->distance, 
                     (target_info->is_switched || target_info->is_spinning_switched), 
                     target_info->is_target, 
@@ -298,14 +298,15 @@ namespace serialport
                     (target_info->is_switched || target_info->is_spinning_switched),
                     mode
                 );
-                                RCLCPP_WARN_THROTTLE(
-                    this->get_logger(),
-                    *this->get_clock(), 
-                    5,
-                    "                 imu_pitch:%f     imu_yaw：%f",
-                    (float)target_info->imu_pitch/3.1415926535*180,
-                    (float)target_info->imu_yaw/3.1415926535*180,
-                );
+                //                 RCLCPP_WARN_THROTTLE(
+                //     this->get_logger(),
+                //     *this->get_clock(), 
+                //     5,
+                //     "                 imu_pitch:%f     imu_yaw：%f",
+                //     (float)target_info->imu_pitch/3.1415926535*180,
+                //     (float)target_info->imu_yaw/3.1415926535*180,
+                //     mode
+                // );
             }
             else 
             {

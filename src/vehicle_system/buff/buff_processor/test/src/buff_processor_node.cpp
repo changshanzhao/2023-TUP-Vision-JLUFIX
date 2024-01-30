@@ -146,7 +146,7 @@ namespace buff_processor
             gimbal_msg.is_target = false;
         }
         gimbal_msg.imu_pitch = buff_msg.imu_pitch;
-        gimbal_msg.imu_pitch = buff_msg.imu_yaw;
+        gimbal_msg.imu_yaw = buff_msg.imu_yaw;
         gimbal_msg.header.frame_id = "barrel_link2";
         gimbal_msg.header.stamp = buff_msg.header.stamp;
 

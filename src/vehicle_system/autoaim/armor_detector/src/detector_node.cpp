@@ -166,6 +166,10 @@ namespace armor_detector
             
             RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 500, "Using imu data...");
         }
+        Eigen::Matrix3d rmat = src.quat.toRotationMatrix();
+        auto vec = rotationMatrixToEulerAngles(rmat);
+        armor_msg.imu_yaw = vec[0];
+        armor_msg.imu_pitch = vec[1];
         serial_msg_mutex_.unlock(); 
 
         RCLCPP_WARN_THROTTLE(

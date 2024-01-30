@@ -254,6 +254,13 @@ namespace buff
                     // cout<<rotate_axis_world.normalized()<<(*fan).centerR3d_world.normalized()<<endl;
                     // cout<<endl;
                     rotate_speed = sign * (angle_axisd.angle()) / (delta_t / 1e3);//计算角速度(rad/s)
+                    // RCLCPP_INFO_THROTTLE(
+                    //     this->get_logger(),
+                    //     *this->get_clock(),
+                    //     5,
+                    //     "                      rotate_speed:  %f   sign:  %d",
+                    //     rotate_speed,
+                    //     sign);
                     // cout<<angle_axisd.axis()<<endl;
                     // cout<<en1dl;
                     // cout<<rotate_speed<<endl;
@@ -354,12 +361,14 @@ namespace buff
         }
 
         mean_rotate_speed = rotate_speed_sum / avail_tracker_cnt;
+        
         mean_r_center = r_center_sum / avail_tracker_cnt;
         double theta_offset = 0;
         
         ///------------------------进行预测----------------------------
         if (src.mode == 3) //进入小能量机关识别模式
             predictor.mode = 0;
+        // mean_rotate_speed = 3.1415926/3
         else if (src.mode == 4) //进入大能量机关识别模式
             predictor.mode = 1;
         // cout<<src.mode<<":"<<predictor.mode<<endl;

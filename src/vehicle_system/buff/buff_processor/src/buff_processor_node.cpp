@@ -219,8 +219,8 @@ namespace buff_processor
                 is_predicted = false;
 
             }
-            plot_mutex_.unlock();
 
+            plot_mutex_.unlock();
             last_gimabl_angle_ = predict_info.angle;
             last_meas_point3d_cam_ = predict_info.armor3d_cam;
             last_meas_point3d_world_ = predict_info.armor3d_world;
@@ -247,16 +247,26 @@ namespace buff_processor
             is_predicted = false;
         }
 
-        RCLCPP_INFO_THROTTLE(
-            this->get_logger(),
-            *this->get_clock(),
-            100, 
-            "Yaw: %.3f Pitch: %.3f", 
-            gimbal_msg.yaw, gimbal_msg.pitch
-        );
+        // RCLCPP_INFO_THROTTLE(
+        //     this->get_logger(),
+        //     *this->get_clock(),
+        //     100, 
+        //     "Yaw: %.3f Pitch: %.3f", 
+        //     gimbal_msg.yaw, gimbal_msg.pitch
+        // );
+
+        // RCLCPP_WARN_THROTTLE(
+        //     this->get_logger(), 
+        //     *this->get_clock(), 
+        //     5, 
+        //     "           meas_point_cam.x   %.3f meas_point_cam.y   %.3f meas_point_cam.z   %.3f", 
+        //     last_meas_point3d_cam_(0), last_meas_point3d_cam_(1), last_meas_point3d_cam_(2)
+        // );
 
         gimbal_msg.header.frame_id = "barrel_link";
         gimbal_msg.header.stamp = target_msg.header.stamp;
+        gimbal_msg.imu_pitch = buff_msg.imu_pitch;
+        gimbal_msg.imu_yaw = buff_msg.imu_yaw;
         gimbal_msg_pub_->publish(std::move(gimbal_msg));
         
         if (debug_param_.show_fitting_curve)
@@ -321,6 +331,8 @@ namespace buff_processor
                 predict_msg.abs_pred_angle = last_pred_angle_;
                 predict_msg.abs_meas_angle = last_meas_angle_;
             }
+            predict_msg.imu_yaw = buff_msg.imu_yaw;
+            predict_msg.imu_pitch = buff_msg.imu_pitch;
             predict_msg_pub_->publish(std::move(predict_msg));
         }
 

@@ -3,6 +3,8 @@ uint8 mode
 # float64 w
 # int64 timestamp
 # bool is_controlled
+float32 imu_pitch
+float32 imu_yaw
 bool is_target_lost
 string vehicle_id
 uint16 vehicle_hp

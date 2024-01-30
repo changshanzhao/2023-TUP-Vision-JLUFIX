@@ -1,4 +1,6 @@
 std_msgs/Header header
+float32 imu_pitch
+float32 imu_yaw
 string key
 Point2f[4] point2d
 float64 rangle
