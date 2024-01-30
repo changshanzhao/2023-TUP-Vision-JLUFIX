@@ -153,7 +153,8 @@ namespace buff_detector
         if (detector_->run(src, target_info))
         {
             buff_msg.timestamp = src.timestamp;
-            buff_msg.rotate_speed = target_info.rotate_speed;
+            // buff_msg.rotate_speed = target_info.rotate_speed;
+            buff_msg.rotate_speed = 3.1415926/3;
             buff_msg.target_switched = target_info.target_switched;
 
             Eigen::Quaterniond quat_world = Eigen::Quaterniond(target_info.rmat);
@@ -191,7 +192,8 @@ namespace buff_detector
         }
         else
         {
-            buff_msg.rotate_speed = last_rotate_speed_;
+            buff_msg.rotate_speed = 3.1415926/3;
+            // buff_msg.rotate_speed = last_rotate_speed_;
             buff_msg.r_center.x = last_center3d_(0);
             buff_msg.r_center.y = last_center3d_(1);
             buff_msg.r_center.z = last_center3d_(2);

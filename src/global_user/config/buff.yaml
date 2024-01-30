@@ -40,7 +40,7 @@
     history_deque_len_phase: 50
     history_deque_len_uniform: 50
     window_size: 2
-    delay_small: 250.0
+    delay_small: 25.0
     delay_big: 170.0
 
   # Paths.
@@ -55,4 +55,4 @@
     debug: true
     show_img: true
     show_marker: false
-    show_fitting_curve: true
+    show_fitting_curve: false

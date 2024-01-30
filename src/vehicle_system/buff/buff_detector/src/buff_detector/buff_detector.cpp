@@ -272,7 +272,7 @@ namespace buff_detector
             return false;
         }
         mean_rotate_speed = rotate_speed_sum / avail_tracker_cnt;
-        // mean_rotate_speed = 3.1415926/3;
+        mean_rotate_speed = 3.1415926/3;
         mean_r_center = r_center_sum / avail_tracker_cnt;
         auto r_center_cam = coordsolver_.worldToCam(target.centerR3d_world, rmat_imu_);
         auto center2d_src = coordsolver_.reproject(r_center_cam);

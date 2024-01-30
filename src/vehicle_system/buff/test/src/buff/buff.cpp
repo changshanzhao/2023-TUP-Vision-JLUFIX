@@ -368,7 +368,7 @@ namespace buff
         ///------------------------进行预测----------------------------
         if (src.mode == 3) //进入小能量机关识别模式
             predictor.mode = 0;
-        // mean_rotate_speed = 3.1415926/3
+        mean_rotate_speed = 3.1415926/3
         else if (src.mode == 4) //进入大能量机关识别模式
             predictor.mode = 1;
         // cout<<src.mode<<":"<<predictor.mode<<endl;
