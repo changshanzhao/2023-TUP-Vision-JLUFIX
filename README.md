@@ -140,7 +140,7 @@ OpenCV  |https://github.com/opencv/opencv/tree/4.2.0 \ https://github.com/opencv
 |程序运行出现WARNING:selected interface "lo" is not multicast-capable: disabling multicast / ERROR:Failed to find a free participant index for domain 0| FIXED:创建一个脚本/etc/network/if-up.d/ros2-lo-multicast：#!/bin/sh ip link set lo multicast on|  |
 Error:recvUC: malformed packet received from vendor 1.16 state parse| Issue:https://github.com/ros2/ros2/issues/1163|
 |Error:编译时出现死机情况| 加入参数--parallel-workers threads_num(>=1)|
-
+|运行时出错，无法找到libopenvino| 在.bashrc文件中export ldlibrary路径|
 ## 7.弹丸命中率测试
 
 | Date       | Description |  ShootCount  |   HitNum   |   TP   |
