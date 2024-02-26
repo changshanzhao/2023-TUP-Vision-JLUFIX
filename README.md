@@ -2,12 +2,17 @@
 基于沈阳航空航天大学TUP战队2023赛季视觉基础程序开发仓库，尝试完善算法，缝合代码
 
 ## Version
-V3.0
+V3.1
 
 程序基于ros-galactic框架
 
-2024/01/27 添加imu数据的topic，便于联合标定
-2024/01/29 改成绝对角度，对齐时间戳，消除通信延迟问题
+- update
+
+|    Time   |      Function  | Description |
+|    ---    |        ---     |    ---      |
+| 2024/01/27 | 添加imu数据的topic | 便于联合标定 |
+| 2024/01/29 | 改成绝对角度，对齐时间戳 | 消除通信延迟问题 |
+| 2024/01/31 | 小符模式固定转速 | 免计算转速，提高稳定性 |
 ## 1.Brief
     程序整体架构采用前后端分离的模式，以实现更加高效的模块化编程。自瞄分为检测模块和预测模块，检测节点订阅相机图像并将图像送入网络推理输出目标信息，预测节点则订阅目标信息并进行跟踪预测。
 
@@ -135,7 +140,7 @@ OpenCV  |https://github.com/opencv/opencv/tree/4.2.0 \ https://github.com/opencv
 |程序运行出现WARNING:selected interface "lo" is not multicast-capable: disabling multicast / ERROR:Failed to find a free participant index for domain 0| FIXED:创建一个脚本/etc/network/if-up.d/ros2-lo-multicast：#!/bin/sh ip link set lo multicast on|  |
 Error:recvUC: malformed packet received from vendor 1.16 state parse| Issue:https://github.com/ros2/ros2/issues/1163|
 |Error:编译时出现死机情况| 加入参数--parallel-workers threads_num(>=1)|
-
+|运行时出错，无法找到libopenvino| 在.bashrc文件中export ldlibrary路径|
 ## 7.弹丸命中率测试
 
 | Date       | Description |  ShootCount  |   HitNum   |   TP   |
