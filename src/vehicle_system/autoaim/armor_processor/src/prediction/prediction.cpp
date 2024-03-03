@@ -114,7 +114,7 @@ namespace armor_processor
     bool ArmorPredictor::predict(TargetInfo target, double dt, double pred_dt, double &delay_time, Eigen::Vector3d &pred_point3d, vector<Eigen::Vector4d> &armor3d_vec, cv::Mat *src)
     {
         SpinHeading spin_state = target.is_spinning ? (target.is_clockwise ? CLOCKWISE : COUNTER_CLOCKWISE) : UNKNOWN;
-        Eigen::Vector4d meas = {target.xyz(0), target.xyz(1), target.xyz(2), -target.rangle};
+        Eigen::Vector4d meas = {target.xyz(0), target.xyz(1), target.xyz(2), target.rangle};
         bool is_target_lost = target.is_target_lost;
        
         pred_point3d = {meas(0), meas(1), meas(2)};
@@ -545,7 +545,7 @@ namespace armor_processor
                 is_available = false;
                 return is_available;
             }
-            else if (pos_diff >= 0.30)
+            else if (pos_diff >= 0)
             {
                 singer_ekf_.x_(0) = meas(0);
                 singer_ekf_.x_(1) = meas(1);

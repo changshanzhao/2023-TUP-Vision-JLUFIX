@@ -265,7 +265,7 @@ namespace armor_processor
                 {
                     is_pred_ = false;
                     is_aimed_ = false;
-                    is_shooting = false;
+                    is_shooting = false;                   
                 } 
             }
             else

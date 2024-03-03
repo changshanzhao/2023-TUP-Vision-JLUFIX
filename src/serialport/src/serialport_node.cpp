@@ -279,7 +279,7 @@ namespace serialport
                 {
                     (serial_port_->steady_clock_.now().nanoseconds() / 1e6),
                     (float)target_info->pitch + (float)target_info->imu_pitch/3.1415926535*180, 
-                    -((float)target_info->yaw + (float)target_info->imu_yaw/3.1415926535*180), 
+                    (-(float)target_info->yaw + (float)target_info->imu_yaw/3.1415926535*180), 
                     (float)target_info->distance, 
                     (target_info->is_switched || target_info->is_spinning_switched), 
                     target_info->is_target, 
