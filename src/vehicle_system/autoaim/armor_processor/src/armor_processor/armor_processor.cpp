@@ -126,13 +126,13 @@ namespace armor_processor
             double rangle = armor.rangle;
             Eigen::Vector3d xyz = {armor.point3d_world.x, armor.point3d_world.y, armor.point3d_world.z};
             // cout << "armor_point3d_world:" << xyz(0) << " " << xyz(1) << " " << xyz(2) << endl;
-            RCLCPP_WARN_THROTTLE(
-                logger_,
-                steady_clock_,
-                5,
-                "armor_point3d_world: %f %f %f",
-                xyz(0),xyz(1),xyz(2)
-            );
+            // RCLCPP_WARN_THROTTLE(
+            //     logger_,
+            //     steady_clock_,
+            //     5,
+            //     "armor_point3d_world: %f %f %f",
+            //     xyz(0),xyz(1),xyz(2)
+            // );
             
             double pred_dt = xyz.norm() / bullet_speed + predict_param_.shoot_delay / 1e3;
             Eigen::VectorXd state = armor_predictor_.uniform_ekf_.x();

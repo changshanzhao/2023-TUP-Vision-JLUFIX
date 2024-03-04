@@ -203,6 +203,7 @@ namespace armor_processor
                 }
 
                 Eigen::Vector4d circle_center3d = {is_reversed_ ? -pred_point3d(0) : pred_point3d(0), is_reversed_ ? -pred_point3d(1) : pred_point3d(1), pred_point3d(2), 0.0};
+                // FIXME:中心点需不需要
                 armor3d_vec.emplace_back(circle_center3d);
                 if (!is_outpost_mode_)
                 {
