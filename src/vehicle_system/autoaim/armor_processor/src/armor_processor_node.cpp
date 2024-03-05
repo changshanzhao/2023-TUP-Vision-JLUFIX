@@ -202,10 +202,14 @@ namespace armor_processor
                             int scale = armor_point3d_world(3) / (2 * CV_PI);
                             double rangle = armor_point3d_world(3) - scale * (2 * CV_PI);
                             // FIXME：修改朝向角范围
-                            if (armor3d_dist < min_dist && rangle >= 1.35 && rangle <= 1.90)
+                            if (armor3d_dist < min_dist && rangle >= 1.45 && rangle <= 1.80)
                             {
                                 min_dist = armor3d_dist;
                                 flag = idx;
+                            }
+                            if (idx == 1)
+                            {
+                                aiming_point_world = {armor3d_vec.at(1)(0), armor3d_vec.at(1)(1), armor3d_vec.at(1)(2)};
                             }
                         
                             Eigen::Vector3d armor_point3d_cam = processor_->coordsolver_.worldToCam({armor_point3d_world(0), armor_point3d_world(1), armor_point3d_world(2)}, rmat_imu);
@@ -217,10 +221,6 @@ namespace armor_processor
                         {
                             aiming_point_world = {armor3d_vec.at(flag)(0), armor3d_vec.at(flag)(1), armor3d_vec.at(flag)(2)};
                             is_shooting = true;
-                        }
-                        else
-                        {
-                            aiming_point_world = {target.armors[0].point3d_world.x, target.armors[0].point3d_world.y, target.armors[0].point3d_world.z};
                         }
                     }
                     else
