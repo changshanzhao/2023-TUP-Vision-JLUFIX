@@ -205,7 +205,7 @@ namespace armor_processor
                             double armor3d_dist = armor_point3d_world.norm();
                             double rangle_t = armor_point3d_world(3);
                             // FIXME：修改朝向角范围
-                            if (armor3d_dist < min_dist && rangle_t >= 1.65 && rangle_t <= 1.70)
+                            if (armor3d_dist < min_dist && rangle_t >= 1.50 && rangle_t <= 1.70)
                             {
                                 min_dist = armor3d_dist;
                                 flag = idx;
