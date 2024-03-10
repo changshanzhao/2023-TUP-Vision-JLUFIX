@@ -84,7 +84,8 @@ namespace armor_processor
         int count_ = 0;
         bool shoot_flag_ = false;
         bool judgeShooting(Eigen::Vector2d tracking_angle, Eigen::Vector2d pred_angle);
-
+        bool judgeShooting_spinning(Eigen::Vector3d tracking_angle, Eigen::Vector3d pred_angle);
+        
     private:
         std::unique_ptr<Processor> processor_;
         std::unique_ptr<Processor> initArmorProcessor();

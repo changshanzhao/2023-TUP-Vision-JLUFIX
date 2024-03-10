@@ -546,7 +546,7 @@ namespace armor_processor
                 is_available = false;
                 return is_available;
             }
-            else if (pos_diff >= 0)
+            else if (pos_diff >= 0.30)
             {
                 singer_ekf_.x_(0) = meas(0);
                 singer_ekf_.x_(1) = meas(1);

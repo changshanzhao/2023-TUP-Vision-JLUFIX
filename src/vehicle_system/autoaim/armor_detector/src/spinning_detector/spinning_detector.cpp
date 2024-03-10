@@ -331,6 +331,7 @@ namespace armor_detector
         return true;
     }
 
+
     /**
      * @brief 判断目标是否处于小陀螺状态
      * 
@@ -489,15 +490,15 @@ namespace armor_detector
                         spinning_map_.spin_status_map[tracker.first].spin_state = UNKNOWN;
                     }
                 }
-
-                if (abs(spinning_map_.spin_counter_map[tracker.first].normal_gyro_status_counter) >= 20 || 
-                    abs(spinning_map_.spin_counter_map[tracker.first].switch_gyro_status_counter >= 3)
+               if (abs(spinning_map_.spin_counter_map[tracker.first].normal_gyro_status_counter) >= 20 || 
+                    abs(spinning_map_.spin_counter_map[tracker.first].switch_gyro_status_counter) >= 3
                 )
                 {
+                            
                     SpinHeading spin_status = UNKNOWN;
                     int count = spinning_map_.spin_counter_map[tracker.first].flag;
                     if (count >= 25)
-                        spin_status = COUNTER_CLOCKWISE;
+                        spin_status = COUNTER_CLOCKWISE;//选择一个作为顺时针。。。。
                     else if (count <= -25)
                         spin_status = COUNTER_CLOCKWISE;
                     

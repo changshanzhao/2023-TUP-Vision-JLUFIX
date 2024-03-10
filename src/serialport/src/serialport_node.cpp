@@ -199,10 +199,11 @@ namespace serialport
                     serial_msg.mode = mode;
                     serial_msg.bullet_speed = bullet_speed;
                     serial_msg.shoot_delay = shoot_delay;
-                    serial_msg.imu.orientation.w = quat[0];
-                    serial_msg.imu.orientation.x = quat[1];
-                    serial_msg.imu.orientation.y = quat[2];
-                    serial_msg.imu.orientation.z = quat[3];
+                    // 下位机乘1000发，会准一点
+                    serial_msg.imu.orientation.w = quat[0]/1000;
+                    serial_msg.imu.orientation.x = quat[1]/1000;
+                    serial_msg.imu.orientation.y = quat[2]/1000;
+                    serial_msg.imu.orientation.z = quat[3]/1000;
                     serial_msg.imu.angular_velocity.x = gyro[0];
                     serial_msg.imu.angular_velocity.y = gyro[1];
                     serial_msg.imu.angular_velocity.z = gyro[2];
@@ -278,8 +279,9 @@ namespace serialport
                 vision_data = 
                 {
                     (serial_port_->steady_clock_.now().nanoseconds() / 1e6),
-                    (float)target_info->pitch + (float)target_info->imu_pitch/3.1415926535*180, 
-                    (-(float)target_info->yaw + (float)target_info->imu_yaw/3.1415926535*180), 
+                    // 乘1000发过去，可能会准一点儿吧
+                    1000*((float)target_info->pitch + (float)target_info->imu_pitch/3.1415926535*180), 
+                    1000*(-(float)target_info->yaw + (float)target_info->imu_yaw/3.1415926535*180), 
                     (float)target_info->distance, 
                     (target_info->is_switched || target_info->is_spinning_switched), 
                     target_info->is_target, 

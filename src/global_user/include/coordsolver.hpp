@@ -60,6 +60,7 @@ namespace coordsolver
         Eigen::Vector3d staticCoordOffset(Eigen::Vector3d &xyz);
         Eigen::Vector2d staticAngleOffset(Eigen::Vector2d &angle);
         Eigen::Vector2d getAngle(Eigen::Vector3d &xyz_cam, Eigen::Matrix3d &rmat);
+        Eigen::Vector2d getAngle_spinning(Eigen::Vector3d &xyz_cam_center,Eigen::Vector3d &xyz_cam_armor, Eigen::Matrix3d &rmat);
         bool setStaticAngleOffset(const Eigen::Vector2d& static_angle_offset);
         double getBulletSpeed();
 

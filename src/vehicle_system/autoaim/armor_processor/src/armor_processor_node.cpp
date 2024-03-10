@@ -93,6 +93,7 @@ namespace armor_processor
      */
     void ArmorProcessorNode::targetMsgCallback(const AutoaimMsg& target_info)
     {
+        double rangle = 0.0;
         double sleep_time = 0.0;
         AutoaimMsg target = std::move(target_info);
 
@@ -115,6 +116,8 @@ namespace armor_processor
         Eigen::Vector3d aiming_point_world = {0.0, 0.0, 0.0};
         Eigen::Vector3d aiming_point_cam = {0.0, 0.0, 0.0};
         Eigen::Vector3d tracking_point_cam = {0.0, 0.0, 0.0};
+        Eigen::Vector3d aiming_point_armor = {0.0, 0.0, 0.0};
+        Eigen::Vector3d aiming_point_armor_cam = {0.0, 0.0, 0.0};
         Eigen::Matrix3d rmat_imu;
         Eigen::Quaterniond quat_imu;
         vector<Eigen::Vector4d> armor3d_vec;
@@ -194,22 +197,23 @@ namespace armor_processor
             {
                 if (!target.is_target_lost)
                 {
+
                     if (target.is_spinning)
                     {   //小陀螺下自动开火判据
                         for (auto armor_point3d_world : armor3d_vec)
                         {
                             double armor3d_dist = armor_point3d_world.norm();
-                            int scale = armor_point3d_world(3) / (2 * CV_PI);
-                            double rangle = armor_point3d_world(3) - scale * (2 * CV_PI);
+                            double rangle_t = armor_point3d_world(3);
                             // FIXME：修改朝向角范围
-                            if (armor3d_dist < min_dist && rangle >= 1.45 && rangle <= 1.80)
+                            if (armor3d_dist < min_dist && rangle_t >= 1.65 && rangle_t <= 1.70)
                             {
                                 min_dist = armor3d_dist;
                                 flag = idx;
                             }
                             if (idx == 1)
                             {
-                                aiming_point_world = {armor3d_vec.at(1)(0), armor3d_vec.at(1)(1), armor3d_vec.at(1)(2)};
+                                rangle = armor_point3d_world(3);
+                                aiming_point_armor = {armor3d_vec.at(1)(0), armor3d_vec.at(1)(1), armor3d_vec.at(1)(2)};
                             }
                         
                             Eigen::Vector3d armor_point3d_cam = processor_->coordsolver_.worldToCam({armor_point3d_world(0), armor_point3d_world(1), armor_point3d_world(2)}, rmat_imu);
@@ -217,10 +221,16 @@ namespace armor_processor
                             cv::circle(dst, point_2d, 13, {255, 255, 0}, -1);
                             ++idx;
                         }
+                         //aiming_point_world(0) = aiming_point_armor(0);
+                        //aiming_point_world(1) = aiming_point_armor(1);
+                        // aiming_point_world(2) = aiming_point_armor(2);
                         if (flag != -1)
                         {
-                            aiming_point_world = {armor3d_vec.at(flag)(0), armor3d_vec.at(flag)(1), armor3d_vec.at(flag)(2)};
                             is_shooting = true;
+                            // if(judgeShooting_spinning(aiming_point_world,aiming_point_armor))//装甲板与中心点水平偏差（或许改成角度更好）
+                            // {
+                            //     is_shooting = true;
+                            // }
                         }
                     }
                     else
@@ -258,7 +268,11 @@ namespace armor_processor
                     tracking_angle = processor_->coordsolver_.getAngle(tracking_point_cam, rmat_imu);
 
                     aiming_point_cam = processor_->coordsolver_.worldToCam(aiming_point_world, rmat_imu);
-                    angle = processor_->coordsolver_.getAngle(aiming_point_cam, rmat_imu);
+                    aiming_point_armor_cam = processor_->coordsolver_.worldToCam(aiming_point_armor, rmat_imu);
+                    if(target.is_spinning)
+                        angle = processor_->coordsolver_.getAngle_spinning(aiming_point_cam,aiming_point_armor_cam, rmat_imu);
+                    else
+                       angle = processor_->coordsolver_.getAngle(aiming_point_cam, rmat_imu);
                 }
 
                 if (abs(tracking_angle[0]) < 6.50 && abs(tracking_angle[1]) < 6.50)
@@ -281,11 +295,11 @@ namespace armor_processor
             param_mutex_.unlock();
         }
 
-        if (!target.is_target_lost)
-        {
-            tracking_point_cam = {target.armors[0].point3d_cam.x, target.armors[0].point3d_cam.y, target.armors[0].point3d_cam.z};
-            tracking_angle = processor_->coordsolver_.getAngle(tracking_point_cam, rmat_imu);
-        }
+        // if (!target.is_target_lost)
+        // {
+        //     tracking_point_cam = {target.armors[0].point3d_cam.x, target.armors[0].point3d_cam.y, target.armors[0].point3d_cam.z};
+    //           tracking_angle = processor_->coordsolver_.getAngle(tracking_point_cam, rmat_imu);
+        // }
 
         if (!is_aimed_)
         {
@@ -349,7 +363,7 @@ namespace armor_processor
         {
             // gimbal_msg.pitch = (abs(tracking_angle[1]) >= 45.0 ? 0.0 : tracking_angle[1])*0.5;
             // gimbal_msg.yaw = (abs(tracking_angle[0]) >= 45.0 ? 0.0 : tracking_angle[0])*0.5;
-            gimbal_msg.pitch = (abs(angle[1]) >= 45.0 ? tracking_angle[1] : angle[1]);
+            gimbal_msg.pitch = (abs(angle[1]) >= 45.0 ? tracking_angle[1] : angle[1]); 
             gimbal_msg.yaw = (abs(angle[0]) >= 45.0 ? tracking_angle[0] : angle[0]);
             gimbal_msg.distance = aiming_point_cam.norm();
         }
@@ -407,19 +421,36 @@ namespace armor_processor
 
             char ch[40];
             char ch1[40];
+            char ch2[40];
             sprintf(ch, "Track:pitch:%.2f yaw:%.2f", tracking_angle[1], tracking_angle[0]);
             sprintf(ch1, "Pred:pitch:%.2f yaw:%.2f", angle[1], angle[0]);
+            sprintf(ch2, "rangle:%.2f", rangle);
             std::string angle_str = ch;
             std::string angle_str1 = ch1;
+            std::string rangle_str = ch2;
             putText(dst, angle_str, {dst.size().width / 2 + 5, 30}, cv::FONT_HERSHEY_TRIPLEX, 1, {0, 255, 255});
             putText(dst, angle_str1, {dst.size().width / 2 + 5, 65}, cv::FONT_HERSHEY_TRIPLEX, 1, {255, 255, 0});
             putText(dst, state_map_[(int)(processor_->armor_predictor_.predictor_state_)], {5, 80}, cv::FONT_HERSHEY_TRIPLEX, 1, {255, 255, 0});
+            putText(dst, rangle_str, {dst.size().width / 2 + 5, 100}, cv::FONT_HERSHEY_TRIPLEX, 1, {255, 255, 0});
             
             cv::namedWindow("armor_pred", cv::WINDOW_AUTOSIZE);
             cv::imshow("armor_pred", dst);
             cv::waitKey(1);
         }
     }
+
+    bool ArmorProcessorNode::judgeShooting_spinning(Eigen::Vector3d tracking_angle, Eigen::Vector3d pred_angle)
+    {
+        bool is_shooting_time = false;
+
+        if (abs(tracking_angle(0) - pred_angle(0)) <= 0.1)//左右差不超过0.05m
+        {
+            is_shooting_time = true;
+        }
+
+        return is_shooting_time;
+    }        
+
 
     bool ArmorProcessorNode::judgeShooting(Eigen::Vector2d tracking_angle, Eigen::Vector2d pred_angle)
     {
