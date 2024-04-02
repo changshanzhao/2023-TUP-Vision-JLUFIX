@@ -272,7 +272,7 @@ namespace armor_processor
                     aiming_point_cam = processor_->coordsolver_.worldToCam(aiming_point_world, rmat_imu);
                     aiming_point_armor_cam = processor_->coordsolver_.worldToCam(aiming_point_armor, rmat_imu);
                     if(target.is_spinning)
-                        angle = processor_->coordsolver_.getAngle_spinning(aiming_point_cam,aiming_point_armor_cam, rmat_imu);
+                        angle = processor_->coordsolver_.getAngle(aiming_point_cam, rmat_imu);
                     else
                        angle = processor_->coordsolver_.getAngle(aiming_point_cam, rmat_imu);
                 }
