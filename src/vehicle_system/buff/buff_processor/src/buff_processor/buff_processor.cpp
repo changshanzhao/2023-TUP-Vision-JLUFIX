@@ -46,7 +46,7 @@ namespace buff_processor
                 Eigen::Vector3d armor3d_cam = {buff_msg.armor3d_cam.x, buff_msg.armor3d_cam.y, buff_msg.armor3d_cam.z};
                
                 // 计算云台偏转角度（pitch、yaw）
-                Eigen::Vector2d tracking_angle = coordsolver_.getAngle(armor3d_cam, rmat_imu_);
+                Eigen::Vector2d tracking_angle = coordsolver_.getAngleBuff(armor3d_cam, rmat_imu_);
                 target_info.angle = tracking_angle;
                 target_info.target_switched = buff_msg.target_switched;
                 return false;
@@ -64,15 +64,15 @@ namespace buff_processor
                 hit_point_world = rmat * hit_point_world + armor3d_world;
 
                 // 转换到相机系
-                Eigen::Vector3d hit_point_cam = coordsolver_.worldToCam(hit_point_world, rmat_imu_);
+                Eigen::Vector3d hit_point_cam = coordsolver_.worldToCamBuff(hit_point_world, rmat_imu_);
                 // 计算云台偏转角度（pitch、yaw）
-                Eigen::Vector2d angle = coordsolver_.getAngle(hit_point_cam, rmat_imu_);
+                Eigen::Vector2d angle = coordsolver_.getAngleBuff(hit_point_cam, rmat_imu_);
                 
                 target_info.angle = angle;
                 target_info.armor3d_world = armor3d_world;
                 target_info.hit_point_world = hit_point_world;
                 target_info.hit_point_cam = hit_point_cam;
-                target_info.armor3d_cam = coordsolver_.worldToCam(armor3d_world, rmat_imu_);
+                target_info.armor3d_cam = coordsolver_.worldToCamBuff(armor3d_world, rmat_imu_);
                 target_info.target_switched = buff_msg.target_switched;
                 return true;
             }

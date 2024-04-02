@@ -357,7 +357,7 @@ namespace buff_detector
         armor3d_transform_vec.emplace_back(t);
 
         // transform to cam frame
-        auto r_center_cam = coordsolver_.worldToCam(target.centerR3d_world, rmat_imu_);
+        auto r_center_cam = coordsolver_.worldToCamBuff(target.centerR3d_world, rmat_imu_);
         auto center2d_src = coordsolver_.reproject(r_center_cam);
 
         // 判断扇叶是否发生切换

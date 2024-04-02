@@ -46,10 +46,10 @@ namespace buff_processor
                 rmat_imu_ = imu_quat.toRotationMatrix();
                 
                 // 转换到相机系
-                Eigen::Vector3d hit_point_cam = coordsolver_.worldToCam(armor3d_world, rmat_imu_);
+                Eigen::Vector3d hit_point_cam = coordsolver_.worldToCamBuff(armor3d_world, rmat_imu_);
 
                 // 计算云台偏转角度（pitch、yaw）
-                Eigen::Vector2d angle = coordsolver_.getAngle(hit_point_cam, rmat_imu_);
+                Eigen::Vector2d angle = coordsolver_.getAngleBuff(hit_point_cam, rmat_imu_);
                 RCLCPP_INFO_THROTTLE(
                     logger_, 
                     steady_clock_,
@@ -108,9 +108,9 @@ namespace buff_processor
                 );
 
                 // 转换到相机系
-                Eigen::Vector3d hit_point_cam = coordsolver_.worldToCam(hit_point_world, rmat_imu_);
+                Eigen::Vector3d hit_point_cam = coordsolver_.worldToCamBuff(hit_point_world, rmat_imu_);
                 // 计算云台偏转角度（pitch、yaw）
-                Eigen::Vector2d angle = coordsolver_.getAngle(hit_point_cam, rmat_imu_);
+                Eigen::Vector2d angle = coordsolver_.getAngleBuff(hit_point_cam, rmat_imu_);
                 
                 RCLCPP_INFO_THROTTLE(
                     logger_, 
@@ -124,7 +124,7 @@ namespace buff_processor
                 buff_info.armor3d_world = armor3d_world;
                 buff_info.hit_point_world = hit_point_world;
                 buff_info.hit_point_cam = hit_point_cam;
-                buff_info.armor3d_cam = coordsolver_.worldToCam(armor3d_world, rmat_imu_);
+                buff_info.armor3d_cam = coordsolver_.worldToCamBuff(armor3d_world, rmat_imu_);
                 
                 // buff_info.abs_meas_angle = abs_meas_angle * (180 / CV_PI);
                 // buff_info.abs_pred_angle = abs_pred_angle * (180 / CV_PI);

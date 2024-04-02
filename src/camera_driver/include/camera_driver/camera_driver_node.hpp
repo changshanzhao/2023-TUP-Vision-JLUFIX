@@ -204,7 +204,6 @@ namespace camera_driver
 
         this->declare_parameter("use_port", false);
         use_serial_ = this->get_parameter("use_port").as_bool();
-        serial_msg_.mode = DEBUG;
         if (use_serial_)
         {
             //串口消息订阅
@@ -275,13 +274,8 @@ namespace camera_driver
             serial_mutex_.lock();
             int mode = serial_msg_.mode;
             serial_mutex_.unlock();
-            if (mode == DEBUG)
-            {
-                camera_pub2armor_node_.publish(image_msg_, camera_info_msg_);
-                camera_pub2buff_node_.publish(image_msg_, camera_info_msg_);
-            }
 
-            else if (mode == AUTOAIM_TRACKING || mode == AUTOAIM_NORMAL ||
+            if (mode == AUTOAIM_TRACKING || mode == AUTOAIM_NORMAL ||
                 mode == AUTOAIM_SLING || mode == OUTPOST_ROTATION_MODE ||
                 mode == SENTRY_NORMAL
             )

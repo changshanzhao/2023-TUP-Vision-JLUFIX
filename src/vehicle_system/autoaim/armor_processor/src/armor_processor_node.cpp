@@ -203,16 +203,18 @@ namespace armor_processor
                         for (auto armor_point3d_world : armor3d_vec)
                         {
                             double armor3d_dist = armor_point3d_world.norm();
-                            double rangle_t = armor_point3d_world(3);
+                            int scale = armor_point3d_world(3)/(2*CV_PI);
+                            double rangle_t = armor_point3d_world(3) - scale*2*CV_PI;
                             // FIXME：修改朝向角范围
-                            if (armor3d_dist < min_dist && rangle_t >= 1.65 && rangle_t <= 1.70)
+                            //if (armor3d_dist < min_dist && ((rangle_t >= 3.50 && rangle_t <= 3.55) || (rangle_t >= 1.65 && rangle_t <= 1.70)))
+                            if (armor3d_dist < min_dist && ((rangle_t >= 1.50 && rangle_t <= 1.70)))
                             {
                                 min_dist = armor3d_dist;
                                 flag = idx;
                             }
                             if (idx == 1)
                             {
-                                rangle = armor_point3d_world(3);
+                                rangle = rangle_t;
                                 aiming_point_armor = {armor3d_vec.at(1)(0), armor3d_vec.at(1)(1), armor3d_vec.at(1)(2)};
                             }
                         

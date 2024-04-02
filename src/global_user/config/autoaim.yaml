@@ -2,7 +2,7 @@
   ros__parameters:
   # Detector params.
     mode: 1
-    color: 0 # red: 1 / blue: 0
+    color: 1 # red: 1 / blue: 0
     max_delta_t: 50
     max_lost_cnt: 5
     max_armors_cnt: 8
@@ -75,11 +75,11 @@
     show_img: true
     draw_predict: true
     show_predict: true
-    show_aim_cross: true
+    show_aim_cross: false
     show_fps: false
     print_delay: false
     sync_transport: false
-    show_marker: true
+    show_marker: false
  
   # Camera params.
     camera_param_path: "/config/camera.yaml"

@@ -55,11 +55,14 @@ namespace coordsolver
         PnPInfo pnp(const std::vector<cv::Point2f> &points_pic, const Eigen::Matrix3d &rmat_imu, enum ::global_user::TargetType type, int method);
         
         Eigen::Vector3d camToWorld(const Eigen::Vector3d &point_camera,const Eigen::Matrix3d &rmat);
+        Eigen::Vector3d camToWorldBuff(const Eigen::Vector3d &point_camera,const Eigen::Matrix3d &rmat);
         Eigen::Vector3d worldToCam(const Eigen::Vector3d &point_world,const Eigen::Matrix3d &rmat);
+        Eigen::Vector3d worldToCamBuff(const Eigen::Vector3d &point_world,const Eigen::Matrix3d &rmat);
 
         Eigen::Vector3d staticCoordOffset(Eigen::Vector3d &xyz);
         Eigen::Vector2d staticAngleOffset(Eigen::Vector2d &angle);
         Eigen::Vector2d getAngle(Eigen::Vector3d &xyz_cam, Eigen::Matrix3d &rmat);
+        Eigen::Vector2d getAngleBuff(Eigen::Vector3d &xyz_cam, Eigen::Matrix3d &rmat);
         Eigen::Vector2d getAngle_spinning(Eigen::Vector3d &xyz_cam_center,Eigen::Vector3d &xyz_cam_armor, Eigen::Matrix3d &rmat);
         bool setStaticAngleOffset(const Eigen::Vector2d& static_angle_offset);
         double getBulletSpeed();
@@ -82,11 +85,13 @@ namespace coordsolver
         Eigen::Vector2d angle_offset;
         Eigen::Vector3d t_iw;
         Eigen::Matrix4d transform_ic;
+        Eigen::Matrix4d transform_buff_ic;
         Eigen::Matrix4d transform_ci;
+        Eigen::Matrix4d transform_buff_ci;
 
-        double bullet_speed = 15.0;   
+        double bullet_speed = 28.0;   
         const double k = 0.01903;                //25°C,1atm,小弹丸
-        const double g = 9.781;
+        const double g = 2.5;
 
         // const double k = 0.00556;                //25°C,1atm,大弹丸
         // const double k = 0.00530;                //25°C,1atm,发光大弹丸

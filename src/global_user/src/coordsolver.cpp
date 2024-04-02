@@ -39,7 +39,9 @@ namespace coordsolver
 
         Eigen::MatrixXd mat_intrinsic(3, 3);
         Eigen::MatrixXd mat_ic(4, 4);
+        Eigen::MatrixXd mat_buff_ic(4, 4);
         Eigen::MatrixXd mat_ci(4, 4);
+        Eigen::MatrixXd mat_buff_ci(4, 4);
         Eigen::MatrixXd mat_coeff(1, 5);
         Eigen::MatrixXd mat_xyz_offset(1,3);
         Eigen::MatrixXd mat_t_iw(1,3);
@@ -76,9 +78,17 @@ namespace coordsolver
         initMatrix(mat_ic,read_vector);
         transform_ic = mat_ic;
 
+        read_vector = config[param_name]["T_buff_ic"].as<std::vector<float>>();
+        initMatrix(mat_buff_ic,read_vector);
+        transform_buff_ic = mat_buff_ic;
+
         read_vector = config[param_name]["T_ci"].as<std::vector<float>>();
         initMatrix(mat_ci,read_vector);
         transform_ci = mat_ci;
+
+        read_vector = config[param_name]["T_buff_ci"].as<std::vector<float>>();
+        initMatrix(mat_buff_ci,read_vector);
+        transform_buff_ci = mat_buff_ci;
 
         cout << "angle_offset:" << angle_offset[0] << " " << angle_offset[1] << endl;
         return true;
@@ -199,10 +209,10 @@ namespace coordsolver
         else
         {
             result.armor_cam = tvec_eigen;
-            result.armor_world = camToWorld(result.armor_cam, rmat_imu);
+            result.armor_world = camToWorldBuff(result.armor_cam, rmat_imu);
             result.R_cam = (rmat_eigen * R_center_world) + tvec_eigen;
-            result.R_world = camToWorld(result.R_cam, rmat_imu);
-            Eigen::Matrix3d rmat_eigen_world = rmat_imu * (transform_ic.block(0, 0, 3, 3) * rmat_eigen);
+            result.R_world = camToWorldBuff(result.R_cam, rmat_imu);
+            Eigen::Matrix3d rmat_eigen_world = rmat_imu * (transform_buff_ic.block(0, 0, 3, 3) * rmat_eigen);
             result.euler = rotationMatrixToEulerAngles(rmat_eigen_world);
             result.rmat = rmat_eigen_world;
         }
@@ -210,7 +220,7 @@ namespace coordsolver
         // RCLCPP_WARN_THROTTLE(
         //     logger_, 
         //     steady_clock_, 
-        //     10, 
+        //     5, 
         //     " armor_cam：(%.3f %.3f %.3f)    armor_world:（%.3f %.3f %.3f）", 
         //     result.armor_cam(0), result.armor_cam(1), result.armor_cam(2),
         //     result.armor_world(0), result.armor_world(1), result.armor_world(2)
@@ -240,12 +250,26 @@ namespace coordsolver
         return angle_offseted;
     }
 
+        Eigen::Vector2d CoordSolver::getAngleBuff(Eigen::Vector3d &xyz_cam, Eigen::Matrix3d &rmat)
+    {
+        auto xyz_offseted = staticCoordOffset(xyz_cam);
+        auto xyz_world = camToWorldBuff(xyz_offseted, rmat);
+        auto angle_cam = calcYawPitch(xyz_cam);
+        // auto dist = xyz_offseted.norm();
+        // auto pitch_offset = 6.457e04 * pow(dist,-2.199);
+        auto pitch_offset = dynamicCalcPitchOffset(xyz_world);
+        angle_cam[1] = angle_cam[1] + pitch_offset;
+        auto angle_offseted = staticAngleOffset(angle_cam);
+
+        return angle_offseted;
+    }
+
     Eigen::Vector2d CoordSolver::getAngle_spinning(Eigen::Vector3d &xyz_cam_center,Eigen::Vector3d &xyz_cam_armor, Eigen::Matrix3d &rmat)
     {
         Eigen::Vector2d angle_cam;
         Eigen::Vector3d xyz;
         xyz = {xyz_cam_center(0),xyz_cam_armor(1),xyz_cam_armor(2)};
-        angle_cam << calcYaw(xyz_cam_center),calcPitch(xyz)-0.40;
+        angle_cam << calcYaw(xyz_cam_center),calcPitch(xyz)-0.30;
         auto xyz_world_armor = camToWorld(xyz, rmat);
         // auto dist = xyz_offseted.norm();
         // auto pitch_offset = 6.457e04 * pow(dist,-2.199);
@@ -270,6 +294,7 @@ namespace coordsolver
         auto result = (1.f / xyz[2]) * mat_intrinsic * (xyz);//解算前进行单位转换
         return cv::Point2f(result[0], result[1]);
     }
+
 
     // cv::Point2f CoordSolver::getHeading(Eigen::Vector3d &xyz_cam)
     // {
@@ -421,7 +446,28 @@ namespace coordsolver
 
         // Eigen::Matrix3d rrmat = rmat;
         // auto vec = rotationMatrixToEulerAngles(rrmat);
-        // RCLCPP_INFO_THROTTLE(logger_, this->steady_clock_, 5, "Euler: %lf %lf %lf", vec[0] * 180 / CV_PI, vec[1] * 180 / CV_PI, vec[2] * 180 / CV_PI);
+        // RCLCPP_INFO_THROTTLE(logmat_ciger_, this->steady_clock_, 5, "Euler: %lf %lf %lf", vec[0] * 180 / CV_PI, vec[1] * 180 / CV_PI, vec[2] * 180 / CV_PI);
+        // cout << "rmat:" << rmat(0,0) << " " << rmat(0,1) << " " << rmat(0,2) << endl
+        // << rmat(1,0) << " " << rmat(1,1) << " " << rmat(1,2) << endl
+        // << rmat(2,0) << " " << rmat(2,1) << " " << rmat(2,2) << endl;   
+        return rmat * point_imu;
+    }
+        Eigen::Vector3d CoordSolver::camToWorldBuff(const Eigen::Vector3d &point_camera, const Eigen::Matrix3d &rmat)
+    {
+        //升高维度
+        Eigen::Vector4d point_camera_tmp;
+        Eigen::Vector4d point_imu_tmp;
+        Eigen::Vector3d point_imu;
+        Eigen::Vector3d point_world;
+
+        point_camera_tmp << point_camera[0], point_camera[1], point_camera[2], 1;
+        point_imu_tmp = transform_buff_ic * point_camera_tmp;
+        point_imu << point_imu_tmp[0], point_imu_tmp[1], point_imu_tmp[2];
+        point_imu -= t_iw;
+
+        // Eigen::Matrix3d rrmat = rmat;
+        // auto vec = rotationMatrixToEulerAngles(rrmat);
+        // RCLCPP_INFO_THROTTLE(logmat_ciger_, this->steady_clock_, 5, "Euler: %lf %lf %lf", vec[0] * 180 / CV_PI, vec[1] * 180 / CV_PI, vec[2] * 180 / CV_PI);
         // cout << "rmat:" << rmat(0,0) << " " << rmat(0,1) << " " << rmat(0,2) << endl
         // << rmat(1,0) << " " << rmat(1,1) << " " << rmat(1,2) << endl
         // << rmat(2,0) << " " << rmat(2,1) << " " << rmat(2,2) << endl;   
@@ -445,6 +491,22 @@ namespace coordsolver
         point_imu += t_iw;
         point_imu_tmp << point_imu[0], point_imu[1], point_imu[2], 1;
         point_camera_tmp = transform_ci * point_imu_tmp;
+        point_camera << point_camera_tmp[0], point_camera_tmp[1], point_camera_tmp[2];
+
+        return point_camera;
+    }
+
+    Eigen::Vector3d CoordSolver::worldToCamBuff(const Eigen::Vector3d &point_world, const Eigen::Matrix3d &rmat)
+    {
+        Eigen::Vector4d point_camera_tmp;
+        Eigen::Vector4d point_imu_tmp;
+        Eigen::Vector3d point_imu;
+        Eigen::Vector3d point_camera;
+
+        point_imu = rmat.transpose() * point_world;
+        point_imu += t_iw;
+        point_imu_tmp << point_imu[0], point_imu[1], point_imu[2], 1;
+        point_camera_tmp = transform_buff_ci * point_imu_tmp;
         point_camera << point_camera_tmp[0], point_camera_tmp[1], point_camera_tmp[2];
 
         return point_camera;

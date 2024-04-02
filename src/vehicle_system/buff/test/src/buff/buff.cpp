@@ -368,7 +368,7 @@ namespace buff
         ///------------------------进行预测----------------------------
         if (src.mode == 3) //进入小能量机关识别模式
             predictor.mode = 0;
-        mean_rotate_speed = 3.1415926/3
+        // mean_rotate_speed = 3.1415926/3;
         else if (src.mode == 4) //进入大能量机关识别模式
             predictor.mode = 1;
         // cout<<src.mode<<":"<<predictor.mode<<endl;
@@ -422,13 +422,13 @@ namespace buff
         
         //Pc = R * Pw + T
         hit_point_world = (target.rmat * hit_point_world) + target.armor3d_world;
-        hit_point_cam = coordsolver.worldToCam(hit_point_world, rmat_imu_);
-        auto r_center_cam = coordsolver.worldToCam(target.centerR3d_world, rmat_imu_);
+        hit_point_cam = coordsolver.worldToCamBuff(hit_point_world, rmat_imu_);
+        auto r_center_cam = coordsolver.worldToCamBuff(target.centerR3d_world, rmat_imu_);
         // auto r_center_cam = coordsolver.worldToCam(mean_r_center, rmat_imu);
         auto center2d_src = coordsolver.reproject(r_center_cam);
         auto target2d = coordsolver.reproject(hit_point_cam);
 
-        auto angle = coordsolver.getAngle(hit_point_cam, rmat_imu_);
+        auto angle = coordsolver.getAngleBuff(hit_point_cam, rmat_imu_);
 
         //-----------------判断扇叶是否发生切换-------------------------
         bool is_switched = false;
@@ -437,7 +437,7 @@ namespace buff
         
         //TODO:使用点乘判断旋转方向
         auto angle_axisd = Eigen::AngleAxisd(relative_rmat);
-        // sign = ((*fan).centerR3d_world.dot(angle_axisd.axis()) > 0 ) ? 1 : -1;
+        sign = ((*fan).centerR3d_world.dot(angle_axisd.axis()) > 0 ) ? 1 : -1;
         auto rotate_speed = (angle_axisd.angle()) / delta_t * 1e3;//计算角速度(rad/s)
         if (abs(rotate_speed) > buff_param_.max_v)
             is_switched = true;

@@ -135,6 +135,15 @@ namespace buff_detector
             src.quat.x() = serial_msg_.imu.orientation.x;
             src.quat.y() = serial_msg_.imu.orientation.y;
             src.quat.z() = serial_msg_.imu.orientation.z;
+            Eigen::Matrix3d rmat_imu = src.quat.toRotationMatrix();
+            auto vec = rotationMatrixToEulerAngles(rmat_imu);
+            vec[0] = vec[0];
+            vec[1] = -vec[1];
+            vec[2] = 0.0;
+            buff_msg.imu_yaw = vec[0];
+            buff_msg.imu_pitch = -vec[1];
+            rmat_imu = eulerToRotationMatrix(vec);
+            src.quat = Eigen::Quaterniond(rmat_imu);
             RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 500, "Using imu...");
         }
         else
@@ -143,9 +152,6 @@ namespace buff_detector
             src.quat = Eigen::Quaterniond(rmat);
         }
         Eigen::Matrix3d rmat_imu = src.quat.toRotationMatrix();
-        auto vec = rotationMatrixToEulerAngles(rmat_imu);
-        buff_msg.imu_yaw = vec[0];
-        buff_msg.imu_pitch = vec[1];
         serial_mutex_.unlock();
         
         TargetInfo target_info;
@@ -153,8 +159,8 @@ namespace buff_detector
         if (detector_->run(src, target_info))
         {
             buff_msg.timestamp = src.timestamp;
-            // buff_msg.rotate_speed = target_info.rotate_speed;
-            buff_msg.rotate_speed = 3.1415926/3;
+            buff_msg.rotate_speed = target_info.rotate_speed;
+            // buff_msg.rotate_speed = 3.1415926/3;
             buff_msg.target_switched = target_info.target_switched;
 
             Eigen::Quaterniond quat_world = Eigen::Quaterniond(target_info.rmat);
@@ -192,8 +198,9 @@ namespace buff_detector
         }
         else
         {
-            buff_msg.rotate_speed = 3.1415926/3;
-            // buff_msg.rotate_speed = last_rotate_speed_;
+            
+            buff_msg.rotate_speed = last_rotate_speed_;
+            // buff_msg.rotate_speed = 3.1415926/3;
             buff_msg.r_center.x = last_center3d_(0);
             buff_msg.r_center.y = last_center3d_(1);
             buff_msg.r_center.z = last_center3d_(2);
