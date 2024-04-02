@@ -139,8 +139,7 @@ namespace buff_processor
         if (mode == SMALL_BUFF)
         {   //TODO:小符模式不需要额外计算,也可增加判断，小符模式给定恒定转速进行击打
             if(mean_velocity > 0)
-                // params[3] = 3.1415926/3-0.3;
-                params[3] = 0.3;
+                params[3] = 3.1415926/3-0.3;
             else
                 params[3] = -(3.1415926/3-0.3);
             is_params_confirmed = true;
@@ -268,7 +267,7 @@ namespace buff_processor
         std::cout << std::endl;
         
         int delay = (mode == BIG_BUFF ? predictor_param_.delay_big : predictor_param_.delay_small);
-        float delta_time_estimate = (dist / predictor_param_.bullet_speed) * 1e3 ;
+        float delta_time_estimate = (dist / predictor_param_.bullet_speed) * 1e3 ;//去掉delay是有意为之，不要改回来
         // delta_time_estimate = 500;
 
         float timespan = history_info.back().timestamp / 1e6;
