@@ -173,6 +173,7 @@ namespace buff_detector
                         angle_axisd = Eigen::AngleAxisd(relative_rmat);
                         auto rotate_axis_world = (*iter).last_fan_.rmat * angle_axisd.axis();
                         sign = ((*fan).centerR3d_world.dot(rotate_axis_world) > 0 ) ? 1 : -1;
+                        rotate_speed = sign * (angle_axisd.angle()) / delta_t * 1e3;
                     }
                     else
                     {
@@ -183,11 +184,12 @@ namespace buff_detector
                         angle_axisd = Eigen::AngleAxisd(relative_rmat);
                         auto rotate_axis_world = (*fan).rmat * angle_axisd.axis();
                         sign = ((*fan).centerR3d_world.dot(rotate_axis_world) > 0 ) ? 1 : -1;
+                        rotate_speed = sign * (angle_axisd.angle()) / delta_t * 1e3;
                     }
 
                     // 计算角速度(rad/s)
-                    delta_t = ((src.timestamp - (*iter).now_) / 1e6);
-                    rotate_speed = sign * (angle_axisd.angle()) / delta_t * 1e3;
+                    //delta_t = ((src.timestamp - (*iter).now_) / 1e6);
+                    
                     if (abs(rotate_speed) <= abs(min_v) && abs(rotate_speed) <= buff_param_.max_v && delta_t <= min_last_delta_t)
                     {
                         min_last_delta_t = delta_t;
@@ -287,6 +289,8 @@ namespace buff_detector
         {
             is_switched = true;
         }
+
+        //FIXME: 赵隽博读，
         
         // frame info.
         lost_cnt_ = 0;

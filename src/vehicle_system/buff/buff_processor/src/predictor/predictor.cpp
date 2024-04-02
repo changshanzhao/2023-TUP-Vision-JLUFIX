@@ -209,7 +209,7 @@ namespace buff_processor
                     params[0] = params_fitting[0] * rotate_sign;
                     params[1] = params_fitting[1];
                     params[2] = params_fitting[2];
-                    params[3] = params_fitting[3] * rotate_sign -0.2;
+                    params[3] = params_fitting[3] * rotate_sign -0.25;
                     is_params_confirmed = true;
                 }
             }
@@ -268,7 +268,7 @@ namespace buff_processor
         std::cout << std::endl;
         
         int delay = (mode == BIG_BUFF ? predictor_param_.delay_big : predictor_param_.delay_small);
-        float delta_time_estimate = (dist / predictor_param_.bullet_speed) * 1e3 + delay;
+        float delta_time_estimate = (dist / predictor_param_.bullet_speed) * 1e3 ;
         // delta_time_estimate = 500;
 
         float timespan = history_info.back().timestamp / 1e6;
