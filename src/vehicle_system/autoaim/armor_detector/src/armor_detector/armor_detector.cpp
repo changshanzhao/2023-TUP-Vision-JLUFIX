@@ -133,41 +133,61 @@ namespace armor_detector
             {
                 target_type = SMALL;
                 armor.key = "B" + to_string(object.cls);
+                armor.is_big = false;
             }
             else if (object.color == BLUE_BIG)
             {
                 target_type = BIG;
                 armor.key = "B" + to_string(object.cls);
+                if(object.cls != 1)
+                    armor.is_big = true;
+                else
+                    armor.is_big = false;
             }
             else if (object.color == GRAY_SMALL)
             {
                 target_type = SMALL;
                 armor.key = "N" + to_string(object.cls);
+                armor.is_big = false;
             }
             else if (object.color == GRAY_BIG)
             {
                 target_type = BIG;
                 armor.key = "N" + to_string(object.cls);
+                if(object.cls != 1)
+                    armor.is_big = true;
+                else
+                    armor.is_big = false;
             }
             else if (object.color == RED_SMALL)
             {
                 target_type = SMALL;
                 armor.key = "R" + to_string(object.cls);
+                armor.is_big = false;
             }     
             else if (object.color == RED_BIG)
             {
                 target_type = BIG;
                 armor.key = "R" + to_string(object.cls);
+                if(object.cls != 1)
+                    armor.is_big = true;
+                else
+                    armor.is_big = false;
             }   
             else if (object.color == PURPLE_SMALL)
             {
                 target_type = SMALL;
                 armor.key = "P" + to_string(object.cls);
+                armor.is_big = false;
             }
             else if (object.color == PURPLE_BIG)
             {
                 target_type = BIG;
                 armor.key = "P" + to_string(object.cls);
+                if(object.cls != 1)
+                    armor.is_big = true;
+                else
+                    armor.is_big = false;
             }
             
             memcpy(armor.apex2d, object.apex, 4 * sizeof(cv::Point2f));
@@ -643,6 +663,7 @@ namespace armor_detector
             armor_msg.point3d_world.y = target.armor3d_world[1];
             armor_msg.point3d_world.z = target.armor3d_world[2];
             armor_msg.is_last_exists = false;
+            armor_msg.is_big = target.is_big;
             for (auto last_armor : last_armors_)
             {
                 if (last_armor.id == target.id && last_armor.roi.contains(target.center2d))
@@ -845,6 +866,10 @@ namespace armor_detector
                 }
                 else if (armor.id == 1 && armor.armor3d_world.norm() <= detector_params_.hero_danger_zone)
                 {   //检测到英雄机器人且在危险距离内，直接作为待打击目标
+                    return armor.id;
+                }
+                else if ((armor.id == 3 || armor.id == 4 || armor.id == 5) && armor.armor3d_world.norm() <= detector_params_.hero_danger_zone-1)
+                {   //检测到步兵机器人且在危险距离内，直接作为待打击目标
                     return armor.id;
                 }
                 else if (armor.id == last_armor_.id && (now_ - last_timestamp_) / 1e6 <= 100 && armor.armor3d_world.norm() <= detector_params_.fire_zone)

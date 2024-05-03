@@ -55,6 +55,7 @@ namespace armor_processor
         bool is_spinning_switched;
         bool is_clockwise;
         bool is_outpost_mode;
+        bool is_big;
         SpinningStatus spinning_status;
         SystemModel system_model;
     };

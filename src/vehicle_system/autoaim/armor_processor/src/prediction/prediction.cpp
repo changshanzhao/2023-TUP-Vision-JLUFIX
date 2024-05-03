@@ -173,12 +173,11 @@ namespace armor_processor
                 is_reversed_ = true;
             }
 
-            if (predictBasedUniformModel(is_target_lost, spin_state, meas, dt, pred_dt, target.period, post_state))
+            if (predictBasedUniformModel(target.is_big, is_target_lost, spin_state, meas, dt, pred_dt, target.period, post_state))
             {
                 Eigen::Vector3d center3d = {post_state(0), post_state(1), post_state(2)}; 
                 double radius = post_state(3);
                 double pred_rangle = post_state(4);
-
                 if (!is_outpost_mode_)
                 {
                     pred_dt *= 0.25;
@@ -207,6 +206,8 @@ namespace armor_processor
                 armor3d_vec.emplace_back(circle_center3d);
                 if (!is_outpost_mode_)
                 {
+                    if(!target.is_big)
+                    {
                     for (int ii = 0; ii < 4; ii++)
                     {
                         Eigen::Vector4d armor3d = {0.0, 0.0, 0.0, 0.0};
@@ -225,6 +226,29 @@ namespace armor_processor
                         armor3d = {is_reversed_ ? -pred_x : pred_x, is_reversed_ ? -pred_y : pred_y, pred_z, pred_next_rangle};
                         armor3d_vec.emplace_back(armor3d);
                     }
+                    }
+                    else
+                    {
+                    for (int ii = 0; ii < 2; ii++)
+                    {
+                        Eigen::Vector4d armor3d = {0.0, 0.0, 0.0, 0.0};
+                        double pred_radius = radius;
+                        double pred_next_rangle = (pred_rangle + CV_PI * ii);
+                        double pred_x = pred_point3d(0) + pred_radius * sin(pred_next_rangle);
+                        double pred_y = pred_point3d(1) - pred_radius * cos(pred_next_rangle);
+                        double pred_z = pred_point3d(2);
+                        if (history_switched_state_vec_.size() > 0)
+                        {
+                            pred_radius = (ii % 2 == 0) ? radius : history_switched_state_vec_.front()(3);
+                            pred_x = pred_point3d(0) + pred_radius * sin(pred_next_rangle);
+                            pred_y = pred_point3d(1) - pred_radius * cos(pred_next_rangle);
+                            pred_z = (ii % 2 == 0) ? pred_point3d(2) : history_switched_state_vec_.front()(2);
+                        }
+                        armor3d = {is_reversed_ ? -pred_x : pred_x, is_reversed_ ? -pred_y : pred_y, pred_z, pred_next_rangle};
+                        armor3d_vec.emplace_back(armor3d);
+                    }
+                    }
+                    
                 }
                 else
                 {
@@ -246,7 +270,7 @@ namespace armor_processor
         return true;
     }
 
-    bool ArmorPredictor::predictBasedUniformModel(bool is_target_lost, SpinHeading spin_state, Eigen::VectorXd meas, double dt, double pred_dt, double spinning_period, Vector6d& post_state)
+    bool ArmorPredictor::predictBasedUniformModel(bool is_big, bool is_target_lost, SpinHeading spin_state, Eigen::VectorXd meas, double dt, double pred_dt, double spinning_period, Vector6d& post_state)
     {
         bool is_pred_success = false;
         if (!is_ekf_init_)
@@ -329,6 +353,8 @@ namespace armor_processor
             pred_state_vec_.clear();
             if (!is_outpost_mode_)
             {
+                if(!is_big)
+                {
                 for (int ii = 0; ii < 4; ii++)
                 {
                     Eigen::Vector4d armor3d = {0.0, 0.0, 0.0, 0.0};
@@ -347,6 +373,29 @@ namespace armor_processor
                     armor3d = {pred_x, pred_y, pred_z, pred_next_rangle};
                     pred_state_vec_.emplace_back(armor3d);
                 }
+                }
+                else
+                {
+                for (int ii = 0; ii < 2; ii++)
+                {
+                    Eigen::Vector4d armor3d = {0.0, 0.0, 0.0, 0.0};
+                    double pred_radius = radius;
+                    double pred_next_rangle = (rangle + CV_PI * ii);
+                    double pred_x = circle_center3d(0) + pred_radius * sin(pred_next_rangle);
+                    double pred_y = circle_center3d(1) - pred_radius * cos(pred_next_rangle);
+                    double pred_z = circle_center3d(2);
+                    if (history_switched_state_vec_.size() > 0)
+                    {
+                        pred_radius = (ii % 2 == 0) ? radius : history_switched_state_vec_.front()(3);
+                        pred_x = circle_center3d(0) + pred_radius * sin(pred_next_rangle);
+                        pred_y = circle_center3d(1) - pred_radius * cos(pred_next_rangle);
+                        pred_z = (ii % 2 == 0) ? circle_center3d(2) : history_switched_state_vec_.front()(2);
+                    }
+                    armor3d = {pred_x, pred_y, pred_z, pred_next_rangle};
+                    pred_state_vec_.emplace_back(armor3d);
+                }
+                }
+              
             }
             else
             {
@@ -442,6 +491,8 @@ namespace armor_processor
             pred_state_vec_.clear();
             if (!is_outpost_mode_)
             {
+                if(!is_big)
+                {
                 for (int ii = 0; ii < 4; ii++)
                 {
                     Eigen::Vector4d armor3d = {0.0, 0.0, 0.0, 0.0};
@@ -460,6 +511,29 @@ namespace armor_processor
                     armor3d = {pred_x, pred_y, pred_z, pred_next_rangle};
                     pred_state_vec_.emplace_back(armor3d);
                 }
+                }
+                else
+                {
+                for (int ii = 0; ii < 2; ii++)
+                {
+                    Eigen::Vector4d armor3d = {0.0, 0.0, 0.0, 0.0};
+                    double pred_radius = radius;
+                    double pred_next_rangle = (rangle + CV_PI * ii);
+                    double pred_x = circle_center3d(0) + pred_radius * sin(pred_next_rangle);
+                    double pred_y = circle_center3d(1) - pred_radius * cos(pred_next_rangle);
+                    double pred_z = circle_center3d(2);
+                    if (history_switched_state_vec_.size() > 0)
+                    {
+                        pred_radius = (ii % 2 == 0) ? radius : history_switched_state_vec_.front()(3);
+                        pred_x = circle_center3d(0) + pred_radius * sin(pred_next_rangle);
+                        pred_y = circle_center3d(1) - pred_radius * cos(pred_next_rangle);
+                        pred_z = (ii % 2 == 0) ? circle_center3d(2) : history_switched_state_vec_.front()(2);
+                    }
+                    armor3d = {pred_x, pred_y, pred_z, pred_next_rangle};
+                    pred_state_vec_.emplace_back(armor3d);
+                }
+                }
+                
             }
             else
             {

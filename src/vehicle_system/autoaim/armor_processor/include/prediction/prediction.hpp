@@ -104,7 +104,7 @@ namespace armor_processor
         bool predictBasedSinger(bool is_target_lost, Eigen::Vector3d meas, Eigen::Vector3d& result, Eigen::Vector3d target_vel, Eigen::Vector3d target_acc, double dt, double pred_dt);
 
         // Uniform Model.
-        bool predictBasedUniformModel(bool is_target_lost, SpinHeading spin_state, Eigen::VectorXd meas, double dt, double pred_dt, double spinning_period, Vector6d& post_state);
+        bool predictBasedUniformModel(bool is_big, bool is_target_lost, SpinHeading spin_state, Eigen::VectorXd meas, double dt, double pred_dt, double spinning_period, Vector6d& post_state);
         
         // 计算车辆中心
         Eigen::Vector2d calcCircleCenter(Eigen::VectorXd meas);

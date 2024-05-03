@@ -8,3 +8,4 @@ geometry_msgs/Point point3d_cam
 geometry_msgs/Point point3d_world
 bool is_last_exists
 bool is_front
+bool is_big

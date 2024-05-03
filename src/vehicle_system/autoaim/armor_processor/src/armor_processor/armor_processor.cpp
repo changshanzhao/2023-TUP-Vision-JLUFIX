@@ -158,6 +158,7 @@ namespace armor_processor
                 target_msg.spinning_switched,
                 target_msg.is_clockwise,
                 (target_msg.mode == AUTOAIM_SLING ? true : false),
+                armor.is_big,
                 (SpinningStatus)(target_msg.is_still_spinning),
                 predict_param_.system_model
             };

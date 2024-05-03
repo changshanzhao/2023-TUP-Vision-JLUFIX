@@ -42,6 +42,7 @@ namespace armor_detector
         TargetType type;
         bool is_front;
         double rangle;
+        bool is_big;
 
         Armor()
         {
