@@ -207,15 +207,10 @@ namespace armor_processor
                             double rangle_t = armor_point3d_world(3) - scale*2*CV_PI;
                             // FIXME：修改朝向角范围
                             //if (armor3d_dist < min_dist && ((rangle_t >= 3.50 && rangle_t <= 3.55) || (rangle_t >= 1.65 && rangle_t <= 1.70)))
-                            if (armor3d_dist < min_dist && ((rangle_t >= 1.50 && rangle_t <= 1.70)))
+                            if (armor3d_dist < min_dist && ((rangle_t >= 1.65 && rangle_t <= 1.70 && !target.is_clockwise) || (rangle_t >= 1.44 && rangle_t <= 1.49 && target.is_clockwise)))
                             {
                                 min_dist = armor3d_dist;
                                 flag = idx;
-                            }
-                            if (idx == 1)
-                            {
-                                rangle = rangle_t;
-                                aiming_point_armor = {armor3d_vec.at(1)(0), armor3d_vec.at(1)(1), armor3d_vec.at(1)(2)};
                             }
                         
                             Eigen::Vector3d armor_point3d_cam = processor_->coordsolver_.worldToCam({armor_point3d_world(0), armor_point3d_world(1), armor_point3d_world(2)}, rmat_imu);
@@ -270,9 +265,14 @@ namespace armor_processor
                     tracking_angle = processor_->coordsolver_.getAngle(tracking_point_cam, rmat_imu);
 
                     aiming_point_cam = processor_->coordsolver_.worldToCam(aiming_point_world, rmat_imu);
-                    aiming_point_armor_cam = processor_->coordsolver_.worldToCam(aiming_point_armor, rmat_imu);
                     if(target.is_spinning)
-                        angle = processor_->coordsolver_.getAngle(aiming_point_cam, rmat_imu);
+                    {
+                        if(is_shooting == false)
+                            angle = processor_->coordsolver_.getAngle_spinning(aiming_point_cam, rmat_imu);
+                        else
+                            angle = processor_->coordsolver_.getAngle(aiming_point_cam, rmat_imu);
+                    }
+
                     else
                        angle = processor_->coordsolver_.getAngle(aiming_point_cam, rmat_imu);
                 }
@@ -757,8 +757,7 @@ namespace armor_processor
         debug_param_.print_delay = this->get_parameter("print_delay").as_bool();
         debug_param_.show_aim_cross = this->get_parameter("show_aim_cross").as_bool();
         show_marker_ = this->get_parameter("show_marker").as_bool();
-
-        cout << "show_marker:" << show_marker_ << endl;
+ 
 
         return true;
     }

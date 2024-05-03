@@ -172,10 +172,10 @@ namespace global_user
     {
         AUTOAIM_TRACKING,
         AUTOAIM_NORMAL,
-        AUTOAIM_SLING,
+        OUTPOST_ROTATION_MODE,
         SMALL_BUFF,
         BIG_BUFF,
-        OUTPOST_ROTATION_MODE,
+        AUTOAIM_SLING,
         SENTRY_NORMAL,
     };
 

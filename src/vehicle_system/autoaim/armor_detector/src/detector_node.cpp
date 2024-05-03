@@ -163,13 +163,18 @@ namespace armor_detector
             src.quat.x() = serial_msg_.imu.orientation.x;
             src.quat.y() = serial_msg_.imu.orientation.y;
             src.quat.z() = serial_msg_.imu.orientation.z;
-            
+            Eigen::Matrix3d rmat_imu = src.quat.toRotationMatrix();
+            auto vec = rotationMatrixToEulerAngles(rmat_imu);
+            vec[0] = vec[0];
+            vec[1] = vec[1];
+            vec[2] = vec[2]+0.015;
+            rmat_imu = eulerToRotationMatrix(vec);
+            src.quat = Eigen::Quaterniond(rmat_imu);
+            armor_msg.imu_yaw = vec[0];
+            armor_msg.imu_pitch = vec[1];
             RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 500, "Using imu data...");
         }
-        Eigen::Matrix3d rmat = src.quat.toRotationMatrix();
-        auto vec = rotationMatrixToEulerAngles(rmat);
-        armor_msg.imu_yaw = vec[0];
-        armor_msg.imu_pitch = vec[1];
+
         serial_msg_mutex_.unlock(); 
 
         RCLCPP_WARN_THROTTLE(

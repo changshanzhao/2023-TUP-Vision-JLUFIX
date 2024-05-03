@@ -2,7 +2,7 @@
   ros__parameters:
   # Detector params.
     mode: 1
-    color: 1 # red: 1 / blue: 0
+    color: 0 # red: 1 / blue: 0
     max_delta_t: 50
     max_lost_cnt: 5
     max_armors_cnt: 8
@@ -49,8 +49,8 @@
   # Debug params.
     use_roi: true
     
-    debug: true
-    show_img: true
+    debug: false
+    show_img: false
     show_crop_img: false
     show_fps: true
     show_aim_cross: true

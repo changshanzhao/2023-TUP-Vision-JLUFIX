@@ -2,7 +2,7 @@
   ros__parameters:
   # Detector params.
     buff_mode: 4
-    color: 0 # 0: blue / 1: red
+    color: 1 #0: blue / 1: red
     max_angle: 0.50  # fan switched angle threshhold
     max_lost_cnt: 5 
     max_v: 4.0  

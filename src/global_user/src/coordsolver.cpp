@@ -264,17 +264,15 @@ namespace coordsolver
         return angle_offseted;
     }
 
-    Eigen::Vector2d CoordSolver::getAngle_spinning(Eigen::Vector3d &xyz_cam_center,Eigen::Vector3d &xyz_cam_armor, Eigen::Matrix3d &rmat)
+    Eigen::Vector2d CoordSolver::getAngle_spinning(Eigen::Vector3d &xyz_cam, Eigen::Matrix3d &rmat)
     {
-        Eigen::Vector2d angle_cam;
-        Eigen::Vector3d xyz;
-        xyz = {xyz_cam_center(0),xyz_cam_armor(1),xyz_cam_armor(2)};
-        angle_cam << calcYaw(xyz_cam_center),calcPitch(xyz)-0.30;
-        auto xyz_world_armor = camToWorld(xyz, rmat);
+        auto xyz_offseted = staticCoordOffset(xyz_cam);
+        auto xyz_world = camToWorld(xyz_offseted, rmat);
+        auto angle_cam = calcYawPitch(xyz_cam);
         // auto dist = xyz_offseted.norm();
         // auto pitch_offset = 6.457e04 * pow(dist,-2.199);
-        auto pitch_offset = dynamicCalcPitchOffset(xyz_world_armor);
-        angle_cam[1] = angle_cam[1] + pitch_offset;
+        auto pitch_offset = dynamicCalcPitchOffset(xyz_world);
+        angle_cam[1] = angle_cam[1] + pitch_offset -0.5;
         auto angle_offseted = staticAngleOffset(angle_cam);
 
         return angle_offseted;

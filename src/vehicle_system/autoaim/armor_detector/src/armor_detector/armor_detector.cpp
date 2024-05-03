@@ -546,7 +546,7 @@ namespace armor_detector
                                     {return prev.armor3d_cam[0] < next.armor3d_cam[0];});
                 // 若顺时针旋转选取右侧装甲板更新
                 if (spin_status == CLOCKWISE)
-                {       
+                {
                     autoaim_msg.is_clockwise = CLOCKWISE;
                     final_armors[1].is_front = true;
                     target = final_armors.at(1);

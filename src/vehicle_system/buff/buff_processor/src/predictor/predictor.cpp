@@ -139,9 +139,9 @@ namespace buff_processor
         if (mode == SMALL_BUFF)
         {   //TODO:小符模式不需要额外计算,也可增加判断，小符模式给定恒定转速进行击打
             if(mean_velocity > 0)
-                params[3] = 3.1415926/3-0.3;
+                params[3] = 3.1415926/3;
             else
-                params[3] = -(3.1415926/3-0.3);
+                params[3] = -(3.1415926/3);
             is_params_confirmed = true;
         }
         else if (mode == BIG_BUFF)
@@ -208,7 +208,15 @@ namespace buff_processor
                     params[0] = params_fitting[0] * rotate_sign;
                     params[1] = params_fitting[1];
                     params[2] = params_fitting[2];
-                    params[3] = params_fitting[3] * rotate_sign -0.25;
+                    if(params[3] > 0)
+                    {
+                        params[3] = params_fitting[3] * rotate_sign;
+                    }
+                    else
+                    {
+                        params[3] = params_fitting[3] * rotate_sign;
+                    }
+                    
                     is_params_confirmed = true;
                 }
             }

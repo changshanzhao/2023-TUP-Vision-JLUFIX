@@ -198,9 +198,11 @@ namespace armor_detector
                 //判断当前tracker是否存在当前帧的装甲板目标
                 if ((tracker.second.now / 1e9) == (now / 1e9) && (tracker.second.last_timestamp / 1e9) == (last_timestamp_ / 1e9))
                 {
-                    Eigen::Matrix3d relative_rmat = tracker.second.last_armor.rmat.transpose() * tracker.second.new_armor.rmat;
-                    Eigen::AngleAxisd axisd_angle = Eigen::AngleAxisd(relative_rmat);
-                    double relative_angle = axisd_angle.angle();
+                    auto vec_1 = rotationMatrixToEulerAngles(tracker.second.last_armor.rmat);
+                    vec_1[0] = vec_1[0];
+                    auto vec_2 = rotationMatrixToEulerAngles(tracker.second.new_armor.rmat);
+                    vec_2[0] = vec_2[0];
+                    double relative_angle = vec_2[0] - vec_1[0];
                     if (spinning_map_.spin_status_map[tracker.first].switch_timestamp != 0)
                     {
                         double dt = (now - spinning_map_.spin_status_map[tracker.first].switch_timestamp) / 1e6;
@@ -500,8 +502,7 @@ namespace armor_detector
                     if (count >= 25)
                         spin_status = COUNTER_CLOCKWISE;//选择一个作为顺时针。。。。
                     else if (count <= -25)
-                        spin_status = COUNTER_CLOCKWISE;
-                    
+                        spin_status = CLOCKWISE;
                     RCLCPP_INFO_THROTTLE(
                         logger_, 
                         steady_clock_, 

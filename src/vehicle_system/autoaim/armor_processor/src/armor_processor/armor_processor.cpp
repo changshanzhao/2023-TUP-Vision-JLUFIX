@@ -96,7 +96,11 @@ namespace armor_processor
         
         if (target_msg.is_target_lost && armor_predictor_.predictor_state_ == LOSTING)
         {
-            double pred_dt = last_target_.xyz.norm() / bullet_speed + predict_param_.shoot_delay / 1e3;
+            double pred_dt = (last_target_.xyz.norm() / bullet_speed + predict_param_.shoot_delay / 1e3);
+            if(target_msg.is_clockwise)
+                pred_dt = -(last_target_.xyz.norm() / bullet_speed + predict_param_.shoot_delay / 1e3);
+            else
+                pred_dt = (last_target_.xyz.norm() / bullet_speed + predict_param_.shoot_delay / 1e3);
             last_target_.is_target_lost = true;
             int max_losting_cnt = (target_msg.mode == AUTOAIM_SLING ? 35 : 5);
             
@@ -133,8 +137,11 @@ namespace armor_processor
             //     "armor_point3d_world: %f %f %f",
             //     xyz(0),xyz(1),xyz(2)
             // );
-            
-            double pred_dt = xyz.norm() / bullet_speed + predict_param_.shoot_delay / 1e3;
+            double pred_dt = (xyz.norm() / bullet_speed + predict_param_.shoot_delay / 1e3);
+            if(target_msg.is_clockwise)
+                pred_dt = -(xyz.norm() / bullet_speed + predict_param_.shoot_delay / 1e3);
+            else
+                pred_dt = (xyz.norm() / bullet_speed + predict_param_.shoot_delay / 1e3);
             Eigen::VectorXd state = armor_predictor_.uniform_ekf_.x();
             Eigen::Vector3d center_xyz = {state(0), state(1), state(2)};
 
