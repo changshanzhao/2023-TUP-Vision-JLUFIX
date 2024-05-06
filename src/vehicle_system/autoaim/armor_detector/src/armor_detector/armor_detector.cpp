@@ -1042,14 +1042,19 @@ namespace armor_detector
             float rrangle = armor.rrect.angle;
             double dist_3d = armor.armor3d_world.norm();
 
-            if (armor.id == 6)
+            if (armor.id == 6 || armor.id == 2)
+            {
+                continue;
+            }
+            else if ((armor.id == 3|| armor.id == 4|| armor.id == 5）&& armor.armor3d_world.norm() <= detector_params_.hero_danger_zone - 1)
             {
                 return armor.id;
             }
-            else if (armor.id == 1 && armor.armor3d_world.norm() <= detector_params_.hero_danger_zone)
+            else if (armor.id == 1&& armor.armor3d_world.norm() <= detector_params_.hero_danger_zone)
             {
                 return armor.id;
             }
+
             else if ((armor.id == last_armor_.id 
             || last_armor_.roi.contains(armor.center2d)
             )
