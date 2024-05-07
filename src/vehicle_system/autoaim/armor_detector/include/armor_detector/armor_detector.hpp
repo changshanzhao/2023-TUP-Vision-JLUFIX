@@ -44,7 +44,7 @@ namespace armor_detector
 
         Point2i cropImageByROI(Mat &img);
         ArmorTracker* chooseTargetTracker(TaskData& src, vector<ArmorTracker*> trackers);
-        int chooseTargetID(TaskData& src);
+        int chooseTargetID(TaskData& src, bool hit_0);
         int chooseTargetID(TaskData& src, std::vector<Armor>& armors, ObjHPMsg hp = ObjHPMsg(), DecisionMsg decision_msg = DecisionMsg());
         void showArmors(TaskData& src);
         // bool normlizeAngle();

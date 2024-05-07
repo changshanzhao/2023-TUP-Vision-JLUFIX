@@ -60,7 +60,7 @@ namespace armor_detector
         serial_msg_.mode = this->get_parameter("mode").as_int();
         serial_msg_.bullet_speed = 0.0;
         serial_msg_.shoot_delay = 0.0;
-
+        serial_msg_.hit_0 = 1;
         // serial msg sub.
         serial_msg_sub_ = this->create_subscription<SerialMsg>(
             "/serial_msg",
@@ -172,6 +172,7 @@ namespace armor_detector
             src.quat = Eigen::Quaterniond(rmat_imu);
             armor_msg.imu_yaw = vec[0];
             armor_msg.imu_pitch = vec[1];
+            armor_msg.hit_0 = serial_msg_.hit_0;
             RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 500, "Using imu data...");
         }
 

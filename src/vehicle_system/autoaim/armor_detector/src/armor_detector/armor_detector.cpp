@@ -342,7 +342,7 @@ namespace armor_detector
         //Choose target vehicle
         //此处首先根据哨兵发来的ID指令进行目标车辆追踪
         int target_id = -1;
-        target_id = chooseTargetID(src);
+        target_id = chooseTargetID(src, autoaim_msg.hit_0);
 
         //Create ArmorTracker for new armors 
         spinning_detector_.createArmorTracker(trackers_map_, new_armors_, new_armors_cnt_map_, now_);
@@ -994,7 +994,7 @@ namespace armor_detector
      * @param timestamp 当前帧对应的时间戳
      * @return int 返回选择的车辆ID
      */
-    int Detector::chooseTargetID(TaskData& src)
+    int Detector::chooseTargetID(TaskData& src, bool hit_0)
     {
         /*
         该选择逻辑主要存在四层约束：前哨站旋转模式约束/英雄约束/上次目标约束/距离位置约束
@@ -1017,11 +1017,19 @@ namespace armor_detector
             float rrangle = armor.rrect.angle;
             double dist_3d = armor.armor3d_world.norm();
 
+            if ( !hit_0 && armor.id == 0)
+            {
+                continue;
+            }
             if (armor.id == 6)
+            {
+                continue;
+            }
+            else if (armor.id == 1 && armor.armor3d_world.norm() <= detector_params_.hero_danger_zone)
             {
                 return armor.id;
             }
-            else if (armor.id == 1 && armor.armor3d_world.norm() <= detector_params_.hero_danger_zone)
+            else if ((armor.id == 3|| armor.id == 4|| armor.id == 5)&& armor.armor3d_world.norm() <= detector_params_.hero_danger_zone - 1)
             {
                 return armor.id;
             }

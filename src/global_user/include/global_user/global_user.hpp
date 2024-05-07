@@ -170,9 +170,9 @@ namespace global_user
      */
     enum MODE
     {
-        AUTOAIM_TRACKING,
+        OUTPOST_ROTATION_MODE,        
         AUTOAIM_NORMAL,
-        OUTPOST_ROTATION_MODE,
+        AUTOAIM_TRACKING,
         SMALL_BUFF,
         BIG_BUFF,
         AUTOAIM_SLING,

@@ -147,6 +147,7 @@ namespace serialport
                 
                 uchar flag = serial_port_->serial_data_.rdata[0];
                 uchar mode = serial_port_->serial_data_.rdata[1];
+                uchar hit_0 = serial_port_->serial_data_.rdata[2];
                 mode_ = mode;
 
                 RCLCPP_INFO_THROTTLE(
@@ -166,11 +167,11 @@ namespace serialport
                     float shoot_delay = 0.0;
                     
                     // Process IMU Datas.
-                    data_transform_->getQuatData(&serial_port_->serial_data_.rdata[2], quat);
-                    data_transform_->getGyroData(&serial_port_->serial_data_.rdata[18], gyro);
-                    data_transform_->getAccData(&serial_port_->serial_data_.rdata[30], acc);
-                    data_transform_->getBulletSpeed(&serial_port_->serial_data_.rdata[42], bullet_speed);
-                    data_transform_->getShootDelay(&serial_port_->serial_data_.rdata[46], shoot_delay);
+                    data_transform_->getQuatData(&serial_port_->serial_data_.rdata[3], quat);
+                    data_transform_->getGyroData(&serial_port_->serial_data_.rdata[19], gyro);
+                    data_transform_->getAccData(&serial_port_->serial_data_.rdata[31], acc);
+                    data_transform_->getBulletSpeed(&serial_port_->serial_data_.rdata[43], bullet_speed);
+                    data_transform_->getShootDelay(&serial_port_->serial_data_.rdata[47], shoot_delay);
                     
                     // Gimbal angle.
                     // float yaw_angle = 0.0, pitch_angle = 0.0;
@@ -180,6 +181,13 @@ namespace serialport
                     // RCLCPP_INFO_THROTTLE(this->get_logger(), *this->get_clock(), 100, "pitch_angle:%.2f", pitch_angle);
                     if (print_serial_info_)
                     {
+                        RCLCPP_INFO_THROTTLE(
+                            this->get_logger(), 
+                            *this->get_clock(), 
+                            100,
+                            "hit_0:%d", 
+                            hit_0
+                        );
                         RCLCPP_INFO_THROTTLE(this->get_logger(), *this->get_clock(), 100, "quat:[%.3f %.3f %.3f %.3f]", quat[0], quat[1], quat[2], quat[3]);
                         RCLCPP_INFO_THROTTLE(this->get_logger(), *this->get_clock(), 100, "gyro:[%.3f %.3f %.3f]", gyro[0], gyro[1], gyro[2]);
                         RCLCPP_INFO_THROTTLE(this->get_logger(), *this->get_clock(), 100, "acc:[%.3f %.3f %.3f]", acc[0], acc[1], acc[2]);
@@ -197,6 +205,7 @@ namespace serialport
                     // imu_msg.header.frame_id = "imu_link";
                     // imu_msg.header.stamp = now;
                     serial_msg.mode = mode;
+                    serial_msg.hit_0 = hit_0;
                     serial_msg.bullet_speed = bullet_speed;
                     serial_msg.shoot_delay = shoot_delay;
                     // 下位机乘1000发，会准一点
