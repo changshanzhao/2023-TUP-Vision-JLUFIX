@@ -16,5 +16,6 @@ bool target_switched
 bool is_spinning
 bool spinning_switched
 bool is_still_spinning
+bool hit_7
 geometry_msgs/Quaternion quat_imu
 Armor[] armors
