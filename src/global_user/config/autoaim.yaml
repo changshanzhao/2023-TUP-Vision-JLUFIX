@@ -71,10 +71,10 @@
     reserve_factor: 500.0 # 储备系数(>=1)
 
   # Debug params.
-    debug: true
-    show_img: true
-    draw_predict: true
-    show_predict: true
+    debug: false
+    show_img: false
+    draw_predict: false
+    show_predict: false
     show_aim_cross: false
     show_fps: false
     print_delay: false
