@@ -170,12 +170,12 @@ namespace global_user
      */
     enum MODE
     {
-        AUTOAIM_TRACKING,
+        AUTOAIM_SLING,
         AUTOAIM_NORMAL,
-        OUTPOST_ROTATION_MODE,
+        AUTOAIM_TRACKING,
         SMALL_BUFF,
         BIG_BUFF,
-        AUTOAIM_SLING,
+        OUTPOST_ROTATION_MODE,
         SENTRY_NORMAL,
     };
 
