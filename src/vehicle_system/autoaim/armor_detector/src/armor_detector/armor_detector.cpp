@@ -1010,6 +1010,7 @@ namespace armor_detector
         float min_rrangle = 1e2;
         float max_rrangle = 0.0;
         double min_3d_dist = 1e2;
+        int flag = 0;
         for (auto& armor : new_armors_)
         {   
             // RCLCPP_INFO_THROTTLE(logger_, steady_clock_, 500, "armor_area:%d", armor.area);
@@ -1019,9 +1020,10 @@ namespace armor_detector
 
             if ( !hit_0 && armor.id == 0)
             {
+                flag = 1;
                 continue;
             }
-            if (armor.id == 6)
+            if (armor.id == 6 || armor.id == 2)
             {
                 continue;
             }
@@ -1075,6 +1077,8 @@ namespace armor_detector
         }
         else
         {
+            if(flag)
+                return -1;
             return (*new_armors_.begin()).id;
         }
     }
