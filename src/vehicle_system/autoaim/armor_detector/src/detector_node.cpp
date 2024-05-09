@@ -165,6 +165,10 @@ namespace armor_detector
             src.quat.z() = serial_msg_.imu.orientation.z;
             Eigen::Matrix3d rmat_imu = src.quat.toRotationMatrix();
             auto vec = rotationMatrixToEulerAngles(rmat_imu);
+            vec[0] = vec[0];
+            vec[1] = vec[1];
+            vec[2] = vec[2]+0.015;
+            rmat_imu = eulerToRotationMatrix(vec);
             src.quat = Eigen::Quaterniond(rmat_imu);
             armor_msg.imu_yaw = vec[0];
             armor_msg.imu_pitch = vec[1];
